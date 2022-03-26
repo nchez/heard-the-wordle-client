@@ -6,10 +6,12 @@ import {
 } from 'react-router-dom'
 import './App.css';
 import Navbar from './components/layout/Navbar'
-import Login from './components/pages/Login'
-import Welcome from './components/pages/Welcome'
-import Register from './components/pages/Register'
+// import Login from './components/Login'
+import Home from './components/pages/Home'
+// import Register from './components/Register'
 import Profile from './components/pages/Profile'
+import Search from './components/pages/Search';
+import Game from './components/pages/Game';
 import { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode'
 
@@ -41,29 +43,40 @@ function App() {
         <Routes>
           <Route 
             path='/'
-            element={<Welcome />}
+            element={<Home currentUser={currentUser} setCurrentUser={setCurrentUser}/>}
           />
 
-          <Route 
+
+          {/* <Route 
             path="/login"
             element={<Login currentUser={currentUser} setCurrentUser={setCurrentUser} />}
-          />
+          /> */}
          {/* 
           <Route 
-            path="/profile"
-            element={<Profile />}
+          path="/profile"
+          element={<Profile />}
           /> 
-          */}
+        */}
           
           <Route 
             path="/profile"
             element={currentUser ? <Profile  currentUser={currentUser} /> : <Navigate to="/login" />}
           />
 
-          <Route 
+          < Route 
+            path="/search"
+            element ={<Search />}
+          />
+          
+          < Route 
+            path="/game"
+            element ={<Game />}
+          />
+
+          {/* <Route 
             path="/register"
             element={<Register currentUser={currentUser} setCurrentUser={setCurrentUser} />}
-          />
+          /> */}
 
         </Routes>
       </div>

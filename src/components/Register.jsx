@@ -45,7 +45,7 @@ export default function Register({ currentUser, setCurrentUser }) {
 
   return (
     <div>
-      <h3>Become a User @ User App!</h3>
+      <h3>Register a new account at Rankify</h3>
 
       <p>{msg}</p>
 
