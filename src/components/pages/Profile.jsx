@@ -37,6 +37,18 @@ export default function Profile({ currentUser }) {
       <h4>The message from the auth locked route is:</h4>
       
       <h6>{msg}</h6>
+
+      <div>
+        <h2>Game History</h2>
+
+        <ul>
+          <li>Score: 9/10</li>
+          <li>Score: 4/10</li>
+          <li>Score: 5/10</li>
+          <li>Score: 6/10</li>
+        </ul>
+
+      </div>
     </div>
   )
 }
