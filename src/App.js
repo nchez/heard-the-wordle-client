@@ -16,10 +16,10 @@ import { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode'
 
 function App() {
-  const CLIENT_ID = "9339daa0c0bd4724976bb425f44f9a2f"
-  const REDIRECT_URI = "http://localhost:3000"
-  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-  const RESPONSE_TYPE = "token"
+  // const CLIENT_ID = "9339daa0c0bd4724976bb425f44f9a2f"
+  // const REDIRECT_URI = "http://localhost:3000"
+  // const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+  // const RESPONSE_TYPE = "token"
 
   // spotify token
   const [spotifyToken, setSpotifyToken] = useState('')
@@ -52,10 +52,10 @@ function App() {
     }
   }, [])
 
-  const spotifyLogout = () => {
-    setSpotifyToken('')
-    window.localStorage.removeItem("token")
-  }
+  // const spotifyLogout = () => {
+  //   setSpotifyToken('')
+  //   window.localStorage.removeItem("token")
+  // }
 
   // logout handleer function that deletes a token from localstorage
   const handleLogout = () => {
@@ -71,11 +71,11 @@ function App() {
 
       <div className="App">
 
-        {!spotifyToken ?
+        {/* {!spotifyToken ?
           <button><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
             to Spotify</a></button>
           : <button onClick={spotifyLogout}>Log out of Spotify</button>
-        }
+        } */}
 
         <Routes>
           <Route 
@@ -85,12 +85,12 @@ function App() {
           
           <Route 
             path="/profile"
-            element={currentUser ? <Profile  currentUser={currentUser} /> : <Navigate to="/login" />}
+            element={currentUser ? <Profile currentUser={currentUser} /> : <Navigate to="/" />}
           />
 
           < Route 
             path="/search"
-            element ={<Search spotifyToken={spotifyToken}/>}
+            element ={<Search setSpotifyToken={setSpotifyToken} spotifyToken={spotifyToken}/>}
           />
           
           < Route 

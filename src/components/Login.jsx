@@ -33,7 +33,7 @@ export default function Login({ currentUser, setCurrentUser }) {
   }
 
   // navigate to the user's profile if currentUser is not null
-  if (currentUser) return <Navigate to="/profile" />
+  // if (currentUser) return <Navigate to="/search" />
   
   return (
     <div>
