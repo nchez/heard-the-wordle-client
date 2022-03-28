@@ -2,11 +2,16 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
 
-export default function Search({ spotifyToken }) {
+export default function Search({ spotifyToken, setSpotifyToken }) {
+    const CLIENT_ID = "9339daa0c0bd4724976bb425f44f9a2f"
+    const REDIRECT_URI = "http://localhost:3000"
+    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+    const RESPONSE_TYPE = "token"
+
     const [search, setSearch] = useState('')
     const [artists, setArtists] = useState([])
     const [artistId, setArtistId] = useState('')
-    const [name, setName] = useState('')
+    const [artistName, setArtistName] = useState('')
 
     const searchArtists = async (e) => {
         e.preventDefault()
@@ -25,7 +30,7 @@ export default function Search({ spotifyToken }) {
     const handleArtistClick = (id, name) => {
         console.log(`handle artist click for ${id}`)
         setArtistId(id)
-        setName(name)
+        setArtistName(name)
     }
 
     const renderArtists = () => {
@@ -35,6 +40,11 @@ export default function Search({ spotifyToken }) {
                 {artist.name}
             </div>
         ))
+    }
+
+    const spotifyLogout = () => {
+        setSpotifyToken('')
+        window.localStorage.removeItem("token")
     }
 
     return(
@@ -58,11 +68,22 @@ export default function Search({ spotifyToken }) {
                     <h3>Search Results</h3>
                             
                     {renderArtists()}
-        
-                    <Link to={`/game/${artistId}`}><input type="button" value={`Start Game ${name}`} /></Link>
+                    
+                    {artistName ?
+                        <Link to={`/game/${artistId}`}><input type="button" value={`Start Game ${artistName}`} /></Link>
+                        : ''
+                    }
                 </div>
             
-            : <h1>You must be logged in to spotify</h1>}
+            : <h1>You must be logged in to spotify</h1>
+            
+        }
+
+        {!spotifyToken ?
+        <button><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
+          to Spotify</a></button>
+        : <button onClick={spotifyLogout}>Log out of Spotify</button>
+        }
 
         </div>
     )

@@ -41,7 +41,7 @@ export default function Register({ currentUser, setCurrentUser }) {
   }
 
   // navigate away if the user logs in
-  if (currentUser) return <Navigate to="/profile" />
+  // if (currentUser) return <Navigate to="/search" />
 
   return (
     <div>
