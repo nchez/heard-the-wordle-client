@@ -40,9 +40,6 @@ export default function Register({ currentUser, setCurrentUser }) {
     }
   }
 
-  // navigate away if the user logs in
-  // if (currentUser) return <Navigate to="/search" />
-
   return (
     <div>
       <h3>Register a new account at Rankify</h3>
