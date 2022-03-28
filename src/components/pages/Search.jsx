@@ -4,7 +4,7 @@ import axios from "axios"
 
 export default function Search({ spotifyToken, setSpotifyToken }) {
     const CLIENT_ID = "9339daa0c0bd4724976bb425f44f9a2f"
-    const REDIRECT_URI = "http://localhost:3000"
+    const REDIRECT_URI = "http://localhost:3000/search"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
 
@@ -50,6 +50,7 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
     return(
         <div>
             <h1>Search Page</h1>
+            <p>Instructions go here</p>
             
             {spotifyToken ? 
                 <div>
