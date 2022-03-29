@@ -8,19 +8,17 @@ export default function Game({ token }) {
     const { id } = useParams()
 
     const [choices, setChoices] = useState([]) // tracks' name and song
-    const [sound, setSound] = useState([]) // tracks
     const [audio, setAudio] = useState({
+        name: '',
         sound: null,
         isPlayed: false
     })
-    const [btnChoice, setBtnChoice] = useState([])
+    const [btnChoice, setBtnChoice] = useState([]) //button choices max 4
 
     useEffect(() => {
         // const something = async () => {
         (async () => {
-            console.log('outside try')
             try {
-                console.log('inside try')
                 // accessing the api to get the top-tracks of the artist(id)
                 const response = await axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks`, {
                     headers: {
@@ -32,21 +30,20 @@ export default function Game({ token }) {
                 })
                 // array for storing the tracks' name and track_url
                 const audioData = []
-                console.log('before audio data gets populated', audioData)
                 for (let i = 0; i < response.data.tracks.length; i++) {
                     audioData.push({ name: response.data.tracks[i].name, song: response.data.tracks[i].preview_url })
                 }
-                console.log('after audio data gets populated', audioData)
                 //saving the tracks' data to a state
                 setChoices(audioData) //tracks' name and url
 
-                console.log('before setting sound', sound)
-                // saving the urls to an array
-                const trackUrl = audioData.map(element => {
-                    return element.song
-                })
-                setSound({ ...sound, trackUrl }) // saving the urls in a state
-                console.log('after setting sound', sound)
+                // console.log('trial', choices[0].song)
+
+                // // saving the urls to an array
+                // const trackUrl = audioData.map(element => {
+                //     return element.song
+                // })
+                // setSound(trackUrl) // saving the urls in a state
+                // console.log('after setting sound', sound)
 
             } catch (error) {
                 console.log(error)
@@ -57,13 +54,48 @@ export default function Game({ token }) {
     }, [audio])
 
     const loadAudio = () => {
-        const rand = Math.floor(Math.random() * sound.trackUrl.length)
-        console.log('rand num', rand)
-        console.log('before setting audio', audio)
-        const prev = sound.trackUrl[rand]
-        setAudio({ ...audio, sound: new Audio(prev) })//assigning a random song from the top 10 
-        console.log('after setting audio', audio)
-        randomChoices()
+        if (audio.sound != null) {
+            if (audio.isPlayed) {
+                audio.sound.pause()
+                setAudio({ ...audio, sound: null, isPlayed: false, name: '' })
+            } else
+                setAudio({ ...audio, sound: null, isPlayed: false, name: '' })
+        } else {
+
+            const rand = Math.floor(Math.random() * choices.length)
+            const prevSong = choices[rand].song
+            const prevName = choices[rand].name
+            setAudio({ ...audio, sound: new Audio(prevSong), name: prevName })//assigning a random song from the top 10 
+            // setAudio({ ...audio, name: prevName })
+            console.log('after setting audio', audio)
+            randomChoices()
+        }
+    }
+
+
+    function randomChoices() { //creates random choices
+        const btnChoices = []
+        const rando = Math.floor(Math.random() * btnChoice.length)
+
+        const correctAnswer = audio.name
+        console.log('correct', correctAnswer)
+
+        console.log('before while', btnChoices.length)
+        // will create 4 randomized choices
+        while (btnChoices.length != 4) {
+            const rand = Math.floor(Math.random() * choices.length)
+            if (!btnChoices.includes(choices[rand].name)) {
+                btnChoices.push(choices[rand].name)
+            }
+        }
+        console.log('after while', btnChoices.length)
+        console.log('current', audio.name)
+        console.log('before', btnChoices)
+        if (!btnChoices.includes(correctAnswer)) {
+            btnChoices.splice(rando, 1, 'correctAnswer')
+            console.log('after', btnChoices)
+        }
+        setBtnChoice(btnChoices)
     }
 
     const handleClick = () => {
@@ -81,31 +113,21 @@ export default function Game({ token }) {
         }
     }
 
-    function randomChoices() {
-        const btnChoice = []
-        const rando = Math.floor(Math.random() * btnChoice.length)
-        const correctAnswer = choices[0]
-        while (btnChoice.length != 4) {
-            const rand = Math.floor(Math.random() * choices.length)
-            if (!btnChoice.includes(choices[rand])) {
-                btnChoice.push(choices[rand])
-            }
-        }
-        console.log('before', btnChoice)
-        if (!btnChoice.includes(correctAnswer)) {
-            btnChoice.splice(rando, 1, correctAnswer)
-            console.log('after', btnChoice)
-
-        }
-        setBtnChoice(btnChoice)
-    }
-    const userChoice = btnChoice.map(e => {
+    const userChoice = btnChoice.map(name => {
         return (
             <>
-                <li><button value={e.name}>{e.name}</button></li>
+                <li><button value={name} onClick={() => checkAnswer(name)}>{name}</button></li>
             </>
         )
     })
+
+    const checkAnswer = (answer) => {
+        if (answer === audio.name)
+            console.log(true)
+        else console.log(false)
+        // console.log(e.song)
+        // console.log(audio.sound.src)
+    }
     return (
         <div>
             <h2>Game Page</h2>
