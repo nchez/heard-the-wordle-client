@@ -12,7 +12,7 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
     const [artists, setArtists] = useState([])
     const [artistId, setArtistId] = useState('')
     const [artistName, setArtistName] = useState('')
-    const [expired, setExpired] = useState(true)
+    const [expired, setExpired] = useState(false)
 
     const searchArtists = async e => {
         try {
