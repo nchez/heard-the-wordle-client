@@ -12,19 +12,29 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
     const [artists, setArtists] = useState([])
     const [artistId, setArtistId] = useState('')
     const [artistName, setArtistName] = useState('')
+    const [expired, setExpired] = useState(true)
 
-    const searchArtists = async (e) => {
-        e.preventDefault()
-        const { data } = await axios.get("https://api.spotify.com/v1/search", {
-            headers: {
-                Authorization: `Bearer ${spotifyToken}`
-            },
-            params: {
-                q: search,
-                type: "artist"
+    const searchArtists = async e => {
+        try {
+            e.preventDefault()
+            const { data } = await axios.get("https://api.spotify.com/v1/search", {
+                headers: {
+                    Authorization: `Bearer ${spotifyToken}`
+                },
+                params: {
+                    q: search,
+                    type: "artist"
+                }
+            })
+            setArtists(data.artists.items)
+            setExpired(false)
+        }
+        catch(err) {
+            if (err.response.status === 401) {
+                console.log(err.response.data)
+                setExpired(true)
             }
-        })
-        setArtists(data.artists.items)
+        }
     }
 
     const handleArtistClick = (id, name) => {
@@ -45,6 +55,7 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
     const spotifyLogout = () => {
         setSpotifyToken('')
         window.localStorage.removeItem("token")
+        setExpired(false)
     }
 
     return(
@@ -52,6 +63,14 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
             <h1>Search Page</h1>
             <p>Instructions go here</p>
             
+            {expired ?
+                <div>
+                    <p><em>Your spotify access token has expired, please <button onClick={spotifyLogout}>log out</button> and log back in for a new token</em></p>
+                </div>
+                :
+                ''
+            }
+
             {spotifyToken ? 
                 <div>
                     <form onSubmit={searchArtists}>
@@ -77,13 +96,12 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
                 </div>
             
             : <h1>You must be logged in to spotify</h1>
-            
         }
 
         {!spotifyToken ?
         <button><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
           to Spotify</a></button>
-        : <button onClick={spotifyLogout}>Log out of Spotify</button>
+        : ''
         }
 
         </div>
