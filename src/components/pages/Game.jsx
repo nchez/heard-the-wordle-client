@@ -14,6 +14,8 @@ export default function Game({ token }) {
         isPlayed: false
     })
     const [btnChoice, setBtnChoice] = useState([]) //button choices max 4
+    const [rounds, setRounds] = useState(1)
+    const [score, setScore] = useState(0)
 
     useEffect(() => {
         // const something = async () => {
@@ -48,10 +50,9 @@ export default function Game({ token }) {
             } catch (error) {
                 console.log(error)
             }
-
         })()
         // }
-    }, [audio])
+    }, [])
 
     const loadAudio = () => {
         if (audio.sound != null) {
@@ -65,38 +66,68 @@ export default function Game({ token }) {
             const rand = Math.floor(Math.random() * choices.length)
             const prevSong = choices[rand].song
             const prevName = choices[rand].name
-            setAudio({ ...audio, sound: new Audio(prevSong), name: prevName })//assigning a random song from the top 10 
+            console.log('tracks name', prevName)
+            console.log('tracks name', prevSong)
+            setAudio({ ...audio, name: prevName, sound: new Audio(prevSong) })//assigning a random song from the top 10 
             // setAudio({ ...audio, name: prevName })
             console.log('after setting audio', audio)
-            randomChoices()
+            // randomChoices()
         }
     }
-
-
-    function randomChoices() { //creates random choices
+    useEffect(() => {
         const btnChoices = []
         const rando = Math.floor(Math.random() * btnChoice.length)
 
         const correctAnswer = audio.name
-        console.log('correct', correctAnswer)
+        console.log('correct', audio.name)
 
         console.log('before while', btnChoices.length)
         // will create 4 randomized choices
-        while (btnChoices.length != 4) {
-            const rand = Math.floor(Math.random() * choices.length)
-            if (!btnChoices.includes(choices[rand].name)) {
-                btnChoices.push(choices[rand].name)
+        if (choices.length != 0) {
+            while (btnChoices.length != 4) {
+                const rand = Math.floor(Math.random() * choices.length)
+                if (!btnChoices.includes(choices[rand].name)) {
+                    btnChoices.push(choices[rand].name)
+                }
             }
         }
+
         console.log('after while', btnChoices.length)
         console.log('current', audio.name)
         console.log('before', btnChoices)
         if (!btnChoices.includes(correctAnswer)) {
-            btnChoices.splice(rando, 1, 'correctAnswer')
+            btnChoices.splice(rando, 1, correctAnswer)
             console.log('after', btnChoices)
         }
         setBtnChoice(btnChoices)
-    }
+        console.log('this is the inside of the audio state', audio)
+    }, [audio.sound])
+
+
+    // function randomChoices() { //creates random choices
+    //     const btnChoices = []
+    //     const rando = Math.floor(Math.random() * btnChoice.length)
+
+    //     const correctAnswer = audio.name
+    //     console.log('correct', audio.name)
+
+    //     console.log('before while', btnChoices.length)
+    //     // will create 4 randomized choices
+    //     while (btnChoices.length != 4) {
+    //         const rand = Math.floor(Math.random() * choices.length)
+    //         if (!btnChoices.includes(choices[rand].name)) {
+    //             btnChoices.push(choices[rand].name)
+    //         }
+    //     }
+    //     console.log('after while', btnChoices.length)
+    //     console.log('current', audio.name)
+    //     console.log('before', btnChoices)
+    //     if (!btnChoices.includes(audio.name)) {
+    //         btnChoices.splice(rando, 1, audio.name)
+    //         console.log('after', btnChoices)
+    //     }
+    //     setBtnChoice(btnChoices)
+    // }
 
     const handleClick = () => {
         console.log('click')
@@ -122,27 +153,42 @@ export default function Game({ token }) {
     })
 
     const checkAnswer = (answer) => {
-        if (answer === audio.name)
+        // const prev = rounds
+        if (answer === audio.name) {
+            setRounds(rounds + 1)
+            setScore(score + 1)
             console.log(true)
-        else console.log(false)
+            loadAudio()
+        }
+        else {
+            console.log(false)
+            setRounds(rounds + 1)
+            loadAudio()
+        }
         // console.log(e.song)
         // console.log(audio.sound.src)
     }
     return (
         <div>
-            <h2>Game Page</h2>
-            <div className="audio-widget">
-                <button onClick={handleClick}>
-                    {!audio.isPlayed ? <BsFillPlayCircleFill /> : <BsFillPauseCircleFill />}
-                </button>
-            </div>
-            {/* <h5>Timer: 30 seconds</h5> */}
-            <button onClick={loadAudio}>Load</button>
-            <h3>Listen to the track and choose your answer</h3>
+            {rounds > 5 ? '<EndGame/>' :
+                <>
+                    <h2>Game Page</h2>
+                    <h3>Round {rounds} of 5</h3>
+                    <h3>Score: {score}</h3>
+                    <div className="audio-widget">
+                        <button onClick={handleClick}>
+                            {!audio.isPlayed ? <BsFillPlayCircleFill /> : <BsFillPauseCircleFill />}
+                        </button>
+                    </div>
+                    {/* <h5>Timer: 30 seconds</h5> */}
+                    <button onClick={loadAudio}>Load</button>
+                    <h3>Listen to the track and choose your answer</h3>
 
-            <ul>
-                {userChoice}
-            </ul>
+                    <ul>
+                        {audio.sound != null ? userChoice : ''}
+                    </ul>
+                </>
+            }
         </div>
     )
 }
