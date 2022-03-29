@@ -95,7 +95,7 @@ function App() {
 
           < Route
             path="/game/:id"
-            element={<Game token={spotifyToken} />}
+            element={<Game token={spotifyToken} currentUser={currentUser}/>}
           />
 
         </Routes>

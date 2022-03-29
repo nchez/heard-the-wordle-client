@@ -3,8 +3,9 @@ import { BsFillPauseCircleFill } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import EndGame from '../EndGame'
 
-export default function Game({ token }) {
+export default function Game({ token, currentUser }) {
     const { id } = useParams()
 
     const [choices, setChoices] = useState([]) // tracks' name and song
@@ -32,6 +33,7 @@ export default function Game({ token }) {
                 })
                 // array for storing the tracks' name and track_url
                 const audioData = []
+                console.log(response.data.tracks[0].artists[0].name)
                 for (let i = 0; i < response.data.tracks.length; i++) {
                     audioData.push({ name: response.data.tracks[i].name, song: response.data.tracks[i].preview_url })
                 }
@@ -170,7 +172,7 @@ export default function Game({ token }) {
     }
     return (
         <div>
-            {rounds > 5 ? '<EndGame/>' :
+            {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser}/> :
                 <>
                     <h2>Game Page</h2>
                     <h3>Round {rounds} of 5</h3>
