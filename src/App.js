@@ -33,16 +33,16 @@ function App() {
     let spotifyToken = window.localStorage.getItem("token")
 
     if (!spotifyToken && hash) {
-        spotifyToken = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+      spotifyToken = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
 
-        window.location.hash = ""
-        window.localStorage.setItem("token", spotifyToken)
+      window.location.hash = ""
+      window.localStorage.setItem("token", spotifyToken)
     }
     setSpotifyToken(spotifyToken)
   }, [])
 
   // app user jwt
-  useEffect(() => { 
+  useEffect(() => {
     const token = localStorage.getItem('jwt')
     // if a toekn is found, log the user in, otherwise make sure they are logged out
     if (token) {
@@ -65,9 +65,9 @@ function App() {
     setCurrentUser(null)
   }
 
-   return (
+  return (
     <Router>
-      <Navbar handleLogout={handleLogout} currentUser={currentUser}/>
+      <Navbar handleLogout={handleLogout} currentUser={currentUser} />
 
       <div className="App">
 
@@ -78,24 +78,24 @@ function App() {
         } */}
 
         <Routes>
-          <Route 
+          <Route
             path='/'
-            element={<Home currentUser={currentUser} setCurrentUser={setCurrentUser}/>}
+            element={<Home currentUser={currentUser} setCurrentUser={setCurrentUser} />}
           />
-          
-          <Route 
+
+          <Route
             path="/profile"
             element={currentUser ? <Profile currentUser={currentUser} /> : <Navigate to="/" />}
           />
 
-          < Route 
+          < Route
             path="/search"
-            element ={<Search setSpotifyToken={setSpotifyToken} spotifyToken={spotifyToken}/>}
+            element={<Search setSpotifyToken={setSpotifyToken} spotifyToken={spotifyToken} />}
           />
-          
-          < Route 
+
+          < Route
             path="/game/:id"
-            element ={<Game />}
+            element={<Game token={spotifyToken} />}
           />
 
         </Routes>
