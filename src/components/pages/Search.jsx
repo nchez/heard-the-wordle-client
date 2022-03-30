@@ -45,10 +45,13 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
 
     const renderArtists = () => {
         return artists.map(artist => (
-            <div key={artist.id} onClick={()=>handleArtistClick(artist.id, artist.name)}>
-                {/* {artist.images.length ? <img width={"20%"} src={artist.images[0].url} alt="" /> : <div>No Image</div>} */}
-                {artist.name}
-            </div>
+            <>
+                <div className="grid-item" key={artist.id} onClick={()=>handleArtistClick(artist.id, artist.name)}>
+                    {artist.images.length ? <img className="img-container" src={artist.images[0].url} alt="" /> : <div>No Image</div>}
+                    <br/>
+                    {artist.name}
+                </div>
+            </>
         ))
     }
 
@@ -63,13 +66,18 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
             <h1>How To Play</h1>
             {/* <h1>Search Page</h1> */}
                 <div>
-                    <img src="https://is2-ssl.mzstatic.com/image/thumb/Purple125/v4/7a/85/89/7a8589fc-7ac1-dbd6-bbde-a6ce7fcf9d8f/source/512x512bb.jpg" alt="search-page-pic" width="30%" height="30%"/>
-                    <p>The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!</p>
+                    <p className="div-center" style={{ width: '50%'}}>The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!</p>
+                    <br/>
+                    <img src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="50%" height="200px"/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div className="div-center" >
       
-                    <p>You play by trying to guess a particular song with only snippets of the song.</p>
-                    <p>Correct guesses will result in a point, but incorrect guesses will result in zero points.</p>
-                    <p>If you trust your ears, search for an artist to get started!</p>
-                    <br></br>
+                        <p>You play by trying to guess a particular song with only snippets of the song.</p>
+                        <p>Correct guesses will result in a point, but incorrect guesses will result in zero points.</p>
+                        <p>If you trust your ears, search for an artist to get started!</p>
+                    </div>
                 </div>
             
             {expired ?
@@ -81,9 +89,9 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
             }
 
             {spotifyToken ? 
-                <div>
+                <div className="form-group">
                     <form onSubmit={searchArtists}>
-                        <label htmlFor="search">Search:</label>
+                        <label className="col-form-label col-form-label-sm mt-4" htmlFor="search">Search: </label>
                         <input 
                             type="text"
                             id="search"
@@ -91,18 +99,22 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
                             onChange={e => setSearch(e.target.value)
                         }
                         />
-                        <input type="submit" />
+                        <input className="btn btn-sm" type="submit" />
                     </form>
                     <br></br>
         
                     <h3>Search Results</h3>
-                            
-                    {renderArtists()}
-                    
+
                     {artistName ?
-                        <Link to={`/game/${artistId}`}><input type="button" value={`Start Game ${artistName}`} /></Link>
+                        <Link to={`/game/${artistId}`}><input className="btn btn-sm btn:hover" type="button" value={`Start Game ${artistName}`} /></Link>
                         : ''
                     }
+
+                    <div className="grid-container">        
+                    {renderArtists()
+                    }
+                    </div>
+                    
                 </div>
             
             : <h1>You must be logged in to spotify</h1>

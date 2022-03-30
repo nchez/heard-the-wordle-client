@@ -15,7 +15,7 @@ export default function Home({ currentUser, setCurrentUser }) {
   console.log(currentUser)
 
   return (
-    <div>
+    <div className="home-description">
       <h2>Home Page: Welcome to Rankify</h2>
 
       <p>We're in the era where music is everywhere. While walking to work, cleaning the house, or just simply lying in bed. But do you feel that sometimes you can do more than just listen? What if you can both enjoy and learn at the same time? What if you can test your knowledge (about music) with other people and compete with them? We present to you..... RANKIFY! An app that tests your knowledge on music based on your choice of artist(s). Given a short preview of a song, you will need to correctly guess the song. This app will bring out your listening abilities and your competitiveness all while vibing to jams.</p>
