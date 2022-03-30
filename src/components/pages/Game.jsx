@@ -8,15 +8,22 @@ import EndGame from '../EndGame'
 export default function Game({ token, currentUser }) {
     const { id } = useParams()
 
-    const [choices, setChoices] = useState([]) // tracks' name and song
+    const [tracks, setTracks] = useState([]) // tracks' name,song,id
     const [audio, setAudio] = useState({
         name: '',
+        id: '',
         sound: null,
         isPlayed: false
     })
     const [btnChoice, setBtnChoice] = useState([]) //button choices max 4
     const [rounds, setRounds] = useState(1)
     const [score, setScore] = useState(0)
+    const [keepTrack, setKeepTrack] = useState([{
+        songName: '',
+        songId: '',
+        songUrl: '',
+        answer: null
+    }])
 
     useEffect(() => {
         // const something = async () => {
@@ -35,26 +42,17 @@ export default function Game({ token, currentUser }) {
                 const audioData = []
                 console.log(response.data.tracks[0].artists[0].name)
                 for (let i = 0; i < response.data.tracks.length; i++) {
-                    audioData.push({ name: response.data.tracks[i].name, song: response.data.tracks[i].preview_url })
+                    audioData.push({ name: response.data.tracks[i].name, song: response.data.tracks[i].preview_url, id: response.data.tracks[i].id })
                 }
                 //saving the tracks' data to a state
-                setChoices(audioData) //tracks' name and url
-
-                // console.log('trial', choices[0].song)
-
-                // // saving the urls to an array
-                // const trackUrl = audioData.map(element => {
-                //     return element.song
-                // })
-                // setSound(trackUrl) // saving the urls in a state
-                // console.log('after setting sound', sound)
-
+                setTracks(audioData) //tracks' name,url,id
             } catch (error) {
                 console.log(error)
             }
         })()
         // }
     }, [])
+
 
     const loadAudio = () => {
         if (audio.sound != null) {
@@ -65,13 +63,27 @@ export default function Game({ token, currentUser }) {
                 setAudio({ ...audio, sound: null, isPlayed: false, name: '' })
         } else {
 
-            const rand = Math.floor(Math.random() * choices.length)
-            const prevSong = choices[rand].song
-            const prevName = choices[rand].name
+            const rand = Math.floor(Math.random() * tracks.length)
+            const prevSong = tracks[rand].song
+            const prevName = tracks[rand].name
+            const prevId = tracks[rand].id
             console.log('tracks name', prevName)
             console.log('tracks name', prevSong)
-            setAudio({ ...audio, name: prevName, sound: new Audio(prevSong) })//assigning a random song from the top 10 
-            // setAudio({ ...audio, name: prevName })
+            console.log('keep track', keepTrack.length)
+            console.log('keep track song', keepTrack.values)
+
+            const searchArray = keepTrack.map(e => {
+                return e.songUrl
+            })
+
+            if (keepTrack.length === 1) {
+                setAudio({ ...audio, name: prevName, id: prevId, sound: new Audio(prevSong) })//assigning a random song from the top 10 
+            }
+            else if (!searchArray.includes(prevSong)) {
+                setAudio({ ...audio, name: prevName, id: prevId, sound: new Audio(prevSong) })//assigning a random song from the top 10 
+            } else loadAudio()
+
+            console.log('keep track', ...keepTrack)
             console.log('after setting audio', audio)
             // randomChoices()
         }
@@ -85,11 +97,11 @@ export default function Game({ token, currentUser }) {
 
         console.log('before while', btnChoices.length)
         // will create 4 randomized choices
-        if (choices.length != 0) {
+        if (tracks.length != 0) {
             while (btnChoices.length != 4) {
-                const rand = Math.floor(Math.random() * choices.length)
-                if (!btnChoices.includes(choices[rand].name)) {
-                    btnChoices.push(choices[rand].name)
+                const rand = Math.floor(Math.random() * tracks.length)
+                if (!btnChoices.includes(tracks[rand].name)) {
+                    btnChoices.push(tracks[rand].name)
                 }
             }
         }
@@ -104,32 +116,6 @@ export default function Game({ token, currentUser }) {
         setBtnChoice(btnChoices)
         console.log('this is the inside of the audio state', audio)
     }, [audio.sound])
-
-
-    // function randomChoices() { //creates random choices
-    //     const btnChoices = []
-    //     const rando = Math.floor(Math.random() * btnChoice.length)
-
-    //     const correctAnswer = audio.name
-    //     console.log('correct', audio.name)
-
-    //     console.log('before while', btnChoices.length)
-    //     // will create 4 randomized choices
-    //     while (btnChoices.length != 4) {
-    //         const rand = Math.floor(Math.random() * choices.length)
-    //         if (!btnChoices.includes(choices[rand].name)) {
-    //             btnChoices.push(choices[rand].name)
-    //         }
-    //     }
-    //     console.log('after while', btnChoices.length)
-    //     console.log('current', audio.name)
-    //     console.log('before', btnChoices)
-    //     if (!btnChoices.includes(audio.name)) {
-    //         btnChoices.splice(rando, 1, audio.name)
-    //         console.log('after', btnChoices)
-    //     }
-    //     setBtnChoice(btnChoices)
-    // }
 
     const handleClick = () => {
         console.log('click')
@@ -160,19 +146,19 @@ export default function Game({ token, currentUser }) {
             setRounds(rounds + 1)
             setScore(score + 1)
             console.log(true)
+            setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: true }])
             loadAudio()
         }
         else {
             console.log(false)
             setRounds(rounds + 1)
+            setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: false }])
             loadAudio()
         }
-        // console.log(e.song)
-        // console.log(audio.sound.src)
     }
     return (
         <div>
-            {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser}/> :
+            {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} forprofile={keepTrack} /> :
                 <>
                     <h2>Game Page</h2>
                     <h3>Round {rounds} of 5</h3>
