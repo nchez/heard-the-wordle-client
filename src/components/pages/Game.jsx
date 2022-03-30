@@ -67,10 +67,10 @@ export default function Game({ token, currentUser }) {
             const prevSong = tracks[rand].song
             const prevName = tracks[rand].name
             const prevId = tracks[rand].id
-            console.log('tracks name', prevName)
-            console.log('tracks name', prevSong)
-            console.log('keep track', keepTrack.length)
-            console.log('keep track song', keepTrack.values)
+            // console.log('tracks name', prevName)
+            // console.log('tracks name', prevSong)
+            // console.log('keep track', keepTrack.length)
+            // console.log('keep track song', keepTrack.values)
 
             const searchArray = keepTrack.map(e => {
                 return e.songUrl
@@ -83,8 +83,8 @@ export default function Game({ token, currentUser }) {
                 setAudio({ ...audio, name: prevName, id: prevId, sound: new Audio(prevSong) })//assigning a random song from the top 10 
             } else loadAudio()
 
-            console.log('keep track', ...keepTrack)
-            console.log('after setting audio', audio)
+            // console.log('keep track', ...keepTrack)
+            // console.log('after setting audio', audio)
             // randomChoices()
         }
     }
@@ -111,14 +111,14 @@ export default function Game({ token, currentUser }) {
         console.log('before', btnChoices)
         if (!btnChoices.includes(correctAnswer)) {
             btnChoices.splice(rando, 1, correctAnswer)
-            console.log('after', btnChoices)
+            // console.log('after', btnChoices)
         }
         setBtnChoice(btnChoices)
         console.log('this is the inside of the audio state', audio)
     }, [audio.sound])
 
     const handleClick = () => {
-        console.log('click')
+        // console.log('click')
         const prev = audio.isPlayed
         if (audio.sound != null) {
             if (audio.isPlayed) {
@@ -158,7 +158,7 @@ export default function Game({ token, currentUser }) {
     }
     return (
         <div>
-            {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} forprofile={keepTrack} /> :
+            {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} songsPlayed={keepTrack} /> :
                 <>
                     <h2>Game Page</h2>
                     <h3>Round {rounds} of 5</h3>
