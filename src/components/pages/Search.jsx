@@ -60,8 +60,17 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
 
     return(
         <div>
-            <h1>Search Page</h1>
-            <p>Instructions go here</p>
+            <h1>How To Play</h1>
+            {/* <h1>Search Page</h1> */}
+                <div>
+                    <img src="https://is2-ssl.mzstatic.com/image/thumb/Purple125/v4/7a/85/89/7a8589fc-7ac1-dbd6-bbde-a6ce7fcf9d8f/source/512x512bb.jpg" alt="search-page-pic" width="30%" height="30%"/>
+                    <p>The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!</p>
+      
+                    <p>You play by trying to guess a particular song with only snippets of the song.</p>
+                    <p>Correct guesses will result in a point, but incorrect guesses will result in zero points.</p>
+                    <p>If you trust your ears, search for an artist to get started!</p>
+                    <br></br>
+                </div>
             
             {expired ?
                 <div>
@@ -84,6 +93,7 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
                         />
                         <input type="submit" />
                     </form>
+                    <br></br>
         
                     <h3>Search Results</h3>
                             
