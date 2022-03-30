@@ -2,13 +2,23 @@ import axios from "axios"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-export default function EndGame({score, artistId, currentUser}) {
+export default function EndGame({score, artistId, currentUser, songsPlayed}) {
     const [scoreSubmit, setScoreSubmit] = useState(false)
 
+    // filter out empty inputs in array - .shift() was removing more than just first index from array
+    const filteredArr = songsPlayed.filter(el=> {
+        return el.songName !== ''
+        console.log(el)
+    })
+
+    console.log('filtered array', filteredArr)
+    
     const scoreObj = {
         score: score,
-        userId: currentUser.id
+        userId: currentUser.id,
+        songsPlayed: filteredArr
     }
+    
 
     const submitScore = async () => {
         try {
