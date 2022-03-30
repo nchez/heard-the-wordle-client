@@ -4,15 +4,20 @@ export default function Navbar({ handleLogout, currentUser }) {
   // if the user is logged in
   const loggedIn = (
     <>
-      {/* if the user is loggerd in..... */}
-      <Link to="/">
-        {/* todo: app function to logout */}
-        <span onClick={handleLogout}>Log out</span>
-      </Link>
+      <nav className="nav nav-tabs nav-item">
+        {/* if the user is logged in..... */}
 
-      <Link to="/profile">Profile</Link>
-
-      <Link to="/search">Search</Link>
+        <Link to="/profile">Profile</Link>
+      </nav>
+      <nav className="nav nav-tabs nav-item">
+        <Link to="/search">Search</Link>
+      </nav>
+      <nav className="nav nav-tabs nav-item">
+        <Link to="/">
+          {/* todo: app function to logout */}
+          <span onClick={handleLogout}>Log out</span>
+        </Link>
+      </nav>
     </>
   )
 
@@ -27,10 +32,11 @@ export default function Navbar({ handleLogout, currentUser }) {
   // )
 
   return (
-    <nav>
-      <Link to="/">Home</Link>
-
-      {currentUser ? loggedIn : ''}
-    </nav>
+    <>
+      <nav className="nav nav-tabs nav-item">
+        <Link to="/">Home</Link>
+        {currentUser ? loggedIn : ''}
+      </nav>
+    </>
   )
 }
