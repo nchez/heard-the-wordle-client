@@ -86,7 +86,7 @@ function App() {
 
           <Route
             path="/profile"
-            element={currentUser ? <Profile currentUser={currentUser} /> : <Navigate to="/" />}
+            element={currentUser ? <Profile currentUser={currentUser} spotifyToken={spotifyToken} /> : <Navigate to="/" />}
           />
 
           < Route
