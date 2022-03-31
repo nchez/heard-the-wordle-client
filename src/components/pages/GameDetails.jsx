@@ -29,6 +29,7 @@ export default function GameDetails({ gameDetail, spotifyToken, currentUser, del
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
             <td>
                 <a href={`${element.songUrl}`}>{element.songName}</a>
             </td>
@@ -40,6 +41,7 @@ export default function GameDetails({ gameDetail, spotifyToken, currentUser, del
     const tableHeaders = (
 
                 <tr>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>

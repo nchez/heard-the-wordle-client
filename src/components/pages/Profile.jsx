@@ -87,76 +87,75 @@ export default function Profile({ spotifyToken, currentUser }) {
     }
 
     const handleArtistSortClick = () => {
-      if (scoreSort !== null || dateSort !== null) {
-        setScoreSort(null)
-        setDateSort(null)
+      
+      setScoreSort(null)
+      setDateSort(null)
+      if (artistSort === null) {
+        setArtistSort('⬆')
       }
       let sortedArray = gameHistory.slice()
-      if (artistSort === null) {
+      if (artistSort === '⬆') {
         sortedArray.sort((a,b)=> {
-          return a.localeCompare(b)
+          const artistA = a.artistName.toUpperCase()
+          const artistB = b.artistName.toUpperCase()
+          return (artistA > artistB) ? -1: (artistA < artistB) ? 1: 0
         })
         setGameHistory(sortedArray)
-        setArtistSort('up')
-        console.log(sortedArray)
-      } else if (artistSort === 'up') {
+        setArtistSort('⬇')
+      } else if (artistSort === '⬇') {
         sortedArray.sort((a,b)=> {
-          return b.localeCompare(a)
+          const artistA = a.artistName.toUpperCase()
+          const artistB = b.artistName.toUpperCase()
+          return (artistA < artistB) ? -1: (artistA > artistB) ? 1: 0
         })
         setGameHistory(sortedArray)
-        setArtistSort('down')
-        console.log(sortedArray)
-      } else if (artistSort === 'down') {
-        sortedArray.sort((a,b)=> {
-          return a.localeCompare(b)
-        })
-        setGameHistory(sortedArray)
-        setArtistSort('up')
-        console.log(sortedArray)
+        setArtistSort('⬆')
       }
     }
     const handleDateSortClick = () => {
-      if (artistSort !== null || scoreSort !== null) {
+     if (dateSort === null) {
+       setDateSort('⬆')
+
+     }
         setArtistSort(null)
         setScoreSort(null)
-      }
-      if (dateSort === null) {
-        gameHistory.sort((a,b)=> {
+      
+      let sortedArray = gameHistory.slice()
+      if (dateSort === '⬆') {
+        sortedArray.sort((a,b)=> {
           return b.date - a.date
         })
-        setDateSort('up')
-      } else if (dateSort === 'up') {
-        gameHistory.sort((a,b)=> {
+        setGameHistory(sortedArray)
+        setDateSort('⬇')
+      } else if (dateSort === '⬇') {
+        sortedArray.sort((a,b)=> {
           return a.date - b.date
         })
-        setDateSort('down')
-      } else if (dateSort === 'down') {
-        gameHistory.sort((a,b)=> {
-          return b.date - a.date
-        })
-        setDateSort('up')
+        setGameHistory(sortedArray)
+        setDateSort('⬆')
       }
     }
     const handleScoreSortClick = () => {
-      if (artistSort !== null || dateSort !== null) {
+      if (scoreSort === null) {
+        
+        setScoreSort('⬆')
+      }
         setArtistSort(null)
         setDateSort(null)
-      }
-      if (scoreSort === null) {
-        gameHistory.sort((a,b)=> {
+    
+      let sortedArray = gameHistory.slice()
+      if (scoreSort === '⬆') {
+        sortedArray.sort((a,b)=> {
           return b.score - a.score
         })
-        setScoreSort('up')
-      } else if (scoreSort === 'up') {
-        gameHistory.sort((a,b)=> {
+        setGameHistory(sortedArray)
+        setScoreSort('⬇')
+      } else if (scoreSort==="⬇") {
+        sortedArray.sort((a,b)=> {
           return a.score - b.score
         })
-        setScoreSort('down')
-      } else {
-        gameHistory.sort((a,b)=> {
-          return b.Score - a.score
-        })
-        setScoreSort('up')
+        setGameHistory(sortedArray)
+        setScoreSort('⬆')
       }
     }
 
@@ -189,9 +188,9 @@ export default function Profile({ spotifyToken, currentUser }) {
 
     const gameTableHeaders = (
         <tr>
-          <th onClick={handleDateSortClick}>Date</th>
-          <th onClick={handleArtistSortClick}>Artist</th>
-          <th onClick={handleScoreSortClick}>Score</th>
+          <th onClick={handleDateSortClick}>Date{dateSort ? dateSort: null}</th>
+          <th onClick={handleArtistSortClick}>Artist{artistSort ? artistSort: null}</th>
+          <th onClick={handleScoreSortClick}>Score{scoreSort ? scoreSort: null}</th>
           <th>Difficulty</th>
           <th>Details</th>
           <th>New Game</th>
@@ -202,6 +201,29 @@ export default function Profile({ spotifyToken, currentUser }) {
   const gameDetails =  gameHistory.map((element, index)=> {
     return <GameDetails key={`game-detail-index-${index}`} gameDetail={element} spotifyToken={spotifyToken} currentUser={currentUser} deleteGame={deleteGame} />
   })
+
+  const summaryTableHeaders = (
+    <tr>
+      <th>Artist</th>
+      <th>Games Played</th>
+      <th>Avg Easy Score</th>
+      <th>Avg Med Score</th>
+      <th>Avg Hard Score</th>
+      <th>Weighted Overall Score</th>
+    </tr>
+  ) 
+  
+
+  const summaryDetails = () => {
+    let gameCount = 0
+    let avgEasy = null
+    let avgMed = null
+    let avgHard = null
+    let wghtdScore = null
+    gameHistory.forEach((element, index)=> {
+      console.log(element)
+    }
+  }
   // const artistNames = gameHistory.map((element,index) => {
   //    return <li key={`artist-list-id-${index}`}>{element.artistId}</li>
   //  })
@@ -212,6 +234,15 @@ export default function Profile({ spotifyToken, currentUser }) {
       <h3>{currentUser.name}'s Profile</h3>
       {!passwordForm && !msg ? <button onClick={handlePasswordForm}>Change Password?</button>: msg}
       {passwordForm ? changePasswordForm : null}
+      </div>
+      <div>
+        <h2>Summary</h2>
+        <table>
+          <tbody>
+            {summaryTableHeaders}
+            {summaryDetails}
+          </tbody>
+        </table>
       </div>
       <div>
         <h2>Game History</h2>
