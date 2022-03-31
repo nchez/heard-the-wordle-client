@@ -21,7 +21,7 @@ function App() {
   // const REDIRECT_URI = "http://localhost:3000"
   // const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
   // const RESPONSE_TYPE = "token"
-
+  const [difficulty, setDifficulty] = useState('')
   // spotify token
   const [spotifyToken, setSpotifyToken] = useState('')
   // state wi the user data when the user is logged in
@@ -91,12 +91,12 @@ function App() {
 
           < Route
             path="/search"
-            element={<Search setSpotifyToken={setSpotifyToken} spotifyToken={spotifyToken} />}
+            element={<Search setSpotifyToken={setSpotifyToken} spotifyToken={spotifyToken} difficulty={difficulty} setDifficulty={setDifficulty} />}
           />
 
           < Route
             path="/game/:id"
-            element={<Game token={spotifyToken} currentUser={currentUser} />}
+            element={<Game token={spotifyToken} currentUser={currentUser} difficulty={difficulty} setDifficulty={setDifficulty} />}
           />
 
         </Routes>
