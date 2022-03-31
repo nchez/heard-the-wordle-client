@@ -9,16 +9,17 @@ export default function Game({ token, currentUser }) {
     const { id } = useParams()
 
     const [tracks, setTracks] = useState([]) // tracks' name,song,id
-    const [audio, setAudio] = useState({
+    const [audio, setAudio] = useState({ //sets up the audio that's being played
         name: '',
         id: '',
         sound: null,
         isPlayed: false
     })
     const [btnChoice, setBtnChoice] = useState([]) //button choices max 4
-    const [rounds, setRounds] = useState(1)
-    const [score, setScore] = useState(0)
+    const [rounds, setRounds] = useState(1) //keep track of the rounds
+    const [score, setScore] = useState(0) // keep track of the scores
     const [keepTrack, setKeepTrack] = useState([{
+        artistName: '',
         songName: '',
         songId: '',
         songUrl: '',
@@ -152,13 +153,13 @@ export default function Game({ token, currentUser }) {
             setRounds(rounds + 1)
             setScore(score + 1)
             console.log(true)
-            setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: true }])
+            setKeepTrack([...keepTrack, { artistName: name, songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: true }])
             loadAudio()
         }
         else {
             console.log(false)
             setRounds(rounds + 1)
-            setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: false }])
+            setKeepTrack([...keepTrack, { artistName: name, songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: false }])
             loadAudio()
         }
     }
@@ -173,11 +174,11 @@ export default function Game({ token, currentUser }) {
             {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} songsPlayed={keepTrack} /> :
                 <>
 
-                    <div className='padding'>
+                    <div className='paddingTop'>
                         <h3>Score: {score}</h3>
                     </div>
 
-                    <div className='padding'>
+                    <div className='paddingTop'>
                         <h2>Playing now:</h2>
                         <h3> {name} </h3>
                     </div>
