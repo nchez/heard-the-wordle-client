@@ -3,7 +3,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { Navigate } from 'react-router-dom'
 
-export default function Login({ currentUser, setCurrentUser }) {
+export default function Login({ currentUser, setCurrentUser, setShowForm }) {
   const [form, setForm] = useState({
     email: '',
     password: ''
@@ -22,6 +22,7 @@ export default function Login({ currentUser, setCurrentUser }) {
       localStorage.setItem('jwt', token)
       // set the app state to the logged in user
       setCurrentUser(decoded)
+      setShowForm(false)
     } catch (err) {
       // handle errors suchs as wrong credentials 
       if (err.response.status === 400) {
@@ -36,10 +37,9 @@ export default function Login({ currentUser, setCurrentUser }) {
     <div>
       <p>{msg ? `the server has a message for you: ${msg}` : ''}</p>
 
-      <form className='center' onSubmit={handleFormSubmit}
-        style={{ border: 'solid white', width: '50%', height: '28vh' }}>
+      <form className='center' onSubmit={handleFormSubmit}>
         <br />
-        <h3>Login form:</h3>
+        <h4 style={{ color: 'white' }} >Login Form:</h4>
         <div className="form-group">
           <label className='form-label mt-4' htmlFor="email">Email:</label>
           <input
@@ -58,6 +58,7 @@ export default function Login({ currentUser, setCurrentUser }) {
           <input
             id="password"
             type="password"
+            placeholder="enter your password..."
             onChange={e => setForm({ ...form, password: e.target.value })}
             value={form.password}
             className="form-control center"
@@ -66,7 +67,7 @@ export default function Login({ currentUser, setCurrentUser }) {
 
         </div>
 
-        <input className="btn  btn-game-choices m-3 mx-5 btn-sm btn-primary container-mini" type="submit" />
+        <input className="btn  btn-game-choices m-3 mx-5 btn-md btn-primary container-mini" style={{ padding: '5px 10px' }} type="submit" />
       </form>
     </div>
   )

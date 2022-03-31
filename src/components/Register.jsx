@@ -3,7 +3,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { Navigate } from 'react-router-dom'
 
-export default function Register({ currentUser, setCurrentUser }) {
+export default function Register({ currentUser, setCurrentUser, setShowForm }) {
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -28,6 +28,7 @@ export default function Register({ currentUser, setCurrentUser }) {
         const decoded = jwt_decode(token)
         // log the user in 
         setCurrentUser(decoded)
+        setShowForm(false)
       } else {
         setMsg('the two passwords you entered do not match 🥴')
       }
@@ -45,10 +46,10 @@ export default function Register({ currentUser, setCurrentUser }) {
 
       <p>{msg}</p>
 
-      <form className='center' onSubmit={handleSubmit}
-        style={{ border: 'solid white', width: '50%', height: '38vh' }}>
+      <form className='center' onSubmit={handleSubmit}>
         <br />
-        <h3>Register a new account at Rankify</h3>
+        <h4 style={{ color: 'white' }}>Register a new account</h4>
+        <br />
         <div className="form-group" style={{ paddingBottom: '10px' }}>
           <label htmlFor="email">Email:</label>
           <input
@@ -91,20 +92,20 @@ export default function Register({ currentUser, setCurrentUser }) {
 
         </div>
         <div class="form-group" style={{ paddingBottom: '10px' }}>
-          <label htmlFor="passwordConfirmation">Confirmation:</label>
+          <label htmlFor="passwordConfirmation">Confirm Your Password:</label>
           <input
             type="password"
             id="passwordConfirmation"
             value={form.passwordConfirmation}
             onChange={e => setForm({ ...form, passwordConfirmation: e.target.value })}
-            placeholder='enter your confirmation...'
+            placeholder='re-enter your password...'
             className="form-control center"
             style={{ width: '300px' }}
           />
 
         </div>
 
-        <input className="btn  btn-game-choices m-3 mx-5 btn-sm btn-primary container-mini" type="submit" />
+        <input className="btn  btn-game-choices m-3 mx-5 btn-md btn-primary container-mini" style={{ padding: '5px 10px' }} type="submit" />
       </form>
     </div>
   )
