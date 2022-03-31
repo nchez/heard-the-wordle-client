@@ -203,7 +203,7 @@ export default function Game({ token, currentUser, difficulty }) {
                         </button>
                     </div>
                     {/* <h5>Timer: 30 seconds</h5> */}
-                    {audio.sound === null ? <button className="btn  btn-game-choices m-3 btn-md btn-primary container-mini" onClick={loadAudio}>Press to load Track</button> : null}
+                    {audio.sound === null ? <button className="btn btn-game-choices m-3 btn-md btn-primary container-mini" onClick={loadAudio}>Press to load Track</button> : null}
                     <h3 style={{ paddingTop: '2rem', color: 'white' }}>Listen to the track and choose your answer</h3>
                     <ul>
                         {audio.sound != null ? userChoice : ''}

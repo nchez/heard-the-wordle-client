@@ -23,10 +23,8 @@ export default function Home({ currentUser, setCurrentUser }) {
 
   return (
     <div className="home-description">
-      <h1 style={{ paddingTop: '5rem' }}>Welcome to Rankify</h1>
+      <h1 style={{ paddingTop: '2.5rem' }}>Welcome to Rankify</h1>
       <br />
-
-    <p><img src="https://media1.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif?cid=ecf05e4763f96e739rc8khkl9znm9e1eytze7zedzdn88z59&rid=giphy.gif&ct=g" /></p>
 
       {!showForm ?
         <div className='div-center'>
@@ -50,6 +48,9 @@ export default function Home({ currentUser, setCurrentUser }) {
               <input onClick={handleForm} className="btn  btn-game-choices m-3 mx-5 btn-md btn-primary container-mini" style={{ padding: '5px 10px' }} type="button" value="LOG IN / REGISTER" />
             </div>
           }
+
+        <br />
+        <p><img src="https://media1.giphy.com/media/3lxD1O74siiz5FvrJs/giphy.gif?cid=ecf05e4763f96e739rc8khkl9znm9e1eytze7zedzdn88z59&rid=giphy.gif&ct=g" /></p>
 
         </div>
 

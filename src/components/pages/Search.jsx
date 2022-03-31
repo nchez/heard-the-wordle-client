@@ -120,53 +120,53 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
                 ''
             }
 
-
             {spotifyToken ?
-                <>
-                    {/*search */}
-                    <div className="form-group">
-                        <form onSubmit={searchArtists}>
-                            <label className="form-label mt-4" htmlFor="search">Search: </label>
-                            <input
-                                type="text"
-                                id="search"
-                                placeholder="enter your search here"
-                                onChange={e => setSearch(e.target.value)
-                                }
-                            />
-                            <input className="btn  btn-game-choices m-3  btn-sm btn-primary container-mini" type="submit" />
-                        </form>
-                        <br></br>
-
-                        {/* difficulty  */}
-                        <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                            <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" value={'easy'} onClick={() => gameModes('easy')} />
-                            <label className="btn btn-primary" htmlFor="btncheck1">Easy</label>
-                            <input type="checkbox" className="btn-check" id="btncheck2" autoComplete="off" value={'medium'} onClick={() => gameModes('medium')} />
-                            <label className="btn btn-primary" htmlFor="btncheck2">Medium</label>
-                            <input type="checkbox" className="btn-check" id="btncheck3" autoComplete="off" value={'hard'} onClick={() => gameModes('hard')} />
-                            <label className="btn btn-primary" htmlFor="btncheck3">Hard</label>
-                        </div>
-                        <br />
-                        {difficulty}
-
-                        {/* start btn */}
-                        {artistName ?
-                            <Link to={`/game/${artistId}`}><input className="btn  btn-game-choices m-3  btn-sm btn-primary container-mini" type="button" value={`Start Game ${artistName}`} /></Link>
-                            : ''
+            <>
+            {/*search */}
+            <div className="form-group">
+                <form onSubmit={searchArtists}>
+                    <label className="form-label mt-4" htmlFor="search">Search: </label>
+                    <input
+                        type="text"
+                        id="search"
+                        placeholder="enter your search here"
+                        onChange={e => setSearch(e.target.value)
                         }
+                    />
+                    <input className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" type="submit" />
+                </form>
+                <br></br>
 
-                        {/* search results */}
-                        {renderedArtists.length != 0 ?
-                            <>
-                                <h3 style={{ color: '#24CB4B' }}>Search Results</h3>
-                                <div className="grid-container" style={{ marginBottom: '5rem' }}>
-                                    {renderedArtists}
-                                </div>
-                            </>
-                            : null}
+                <div className="btn-group container-mini btn-game-choices btn-search" role="group" aria-label="Basic radio toggle button group"  >
+                    <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="" value={'easy'} onClick={() => gameModes('easy')}/>
+                    <label className="btn btn-outline-primary" for="btnradio1" style={{ backgroundColor: 'transparent', color : 'white' }} >Easy</label>
 
-                    </div>
+                    <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked="" value={'medium'} onClick={() => gameModes('medium')}/>
+                    <label className="btn btn-outline-primary" for="btnradio2" style={{ backgroundColor: 'transparent', color : 'white' }} >Medium</label>
+
+                    <input type="radio" className="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked="" value={'hard'} onClick={() => gameModes('hard')} />
+                    <label className="btn btn-outline-primary" for="btnradio3" style={{ backgroundColor: 'transparent', color : 'white' }} >Hard</label>
+                </div>
+
+                <br />
+
+                {/* start btn */}
+                {artistName && difficulty !== '' ?
+                    <Link to={`/game/${artistId}`}><input className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" type="button" value={`Start Game ${artistName}`} /></Link>
+                    : ''
+                }
+
+                {/* search results */}
+                {renderedArtists.length != 0 ?
+                    <>
+                        <h3 style={{ color: '#24CB4B' }}>Search Results</h3>
+                        <div className="grid-container">
+                            {renderedArtists}
+                        </div>
+                    </>
+                    : null}
+
+            </div>
                 </>
 
                 : <h1>You must be logged in to spotify</h1>
