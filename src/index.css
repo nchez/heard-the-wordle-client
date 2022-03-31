@@ -89,6 +89,9 @@
    background-color: var(--bs-body-bg);
    -webkit-text-size-adjust: 100%;
    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+   margin-bottom: 150px;
+   min-height: 400px;
+   clear: both;
  }
  
  hr {
@@ -2543,6 +2546,7 @@
    position: absolute;
    clip: rect(0, 0, 0, 0);
    pointer-events: none;
+   background: transparent;
  }
  
  .btn-check[disabled] + .btn, .btn-check:disabled + .btn {
@@ -3423,18 +3427,18 @@
  }
  
  .btn-outline-primary {
-   color: #378dfc;
-   border-color: #378dfc;
+   color: #24CB4B;
+   border-color: #24CB4B;
  }
  
  .btn-outline-primary:hover {
    color: #fff;
-   background-color: #378dfc;
-   border-color: #378dfc;
+   background-color: #24CB4B;
+   border-color: #24CB4B;
  }
  
  .btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
-   box-shadow: 0 0 0 0.25rem rgba(55, 141, 252, 0.5);
+   box-shadow: 0 0 0 0.25rem rgb(251, 72, 196);
  }
  
  .btn-check:checked + .btn-outline-primary,
@@ -12275,8 +12279,13 @@ ul {
  }
 
  .container-mini{
-   color: white; 
-   border: solid #24CB4B;
+  color: white; 
+  border: solid #24CB4B;
   background: transparent 
  }
 
+ .game-level {
+  color: white; 
+  border: solid #24CB4B;
+  background: transparent;
+ }
