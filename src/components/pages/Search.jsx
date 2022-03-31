@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import { render } from "@testing-library/react"
 
 export default function Search({ spotifyToken, setSpotifyToken }) {
     const CLIENT_ID = "9339daa0c0bd4724976bb425f44f9a2f"
@@ -43,8 +44,8 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
         setArtistName(name)
     }
 
-    const renderArtists = () => {
-        return artists.map(artist => (
+    const renderedArtists = artists.map(artist => {
+        return (
             <>
                 <div className="grid-item" key={artist.id} onClick={() => handleArtistClick(artist.id, artist.name)}>
                     {artist.images.length ? <img className="img-container" src={artist.images[0].url} alt="" /> : <div>No Image</div>}
@@ -52,8 +53,19 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
                     {artist.name}
                 </div>
             </>
-        ))
-    }
+        )
+    })
+    // const renderArtists = () => {
+    //     return artists.map(artist => (
+    //         <>
+    //             <div className="grid-item" key={artist.id} onClick={() => handleArtistClick(artist.id, artist.name)}>
+    //                 {artist.images.length ? <img className="img-container" src={artist.images[0].url} alt="" /> : <div>No Image</div>}
+    //                 <br />
+    //                 {artist.name}
+    //             </div>
+    //         </>
+    //     ))
+    // }
 
     const spotifyLogout = () => {
         setSpotifyToken('')
@@ -63,16 +75,14 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
 
     return (
         <div>
-            <h1>How To Play</h1>
+            <h1 className="paddingTop">How To Play</h1>
             {/* <h1>Search Page</h1> */}
             <div>
-                <p className="div-center" style={{ width: '50%' }}>The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!</p>
+                <p className="div-center paddingTop" style={{ width: '60%' }}>The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!</p>
                 <br />
-                <img src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="50%" height="200px" />
-                <br />
-                <br />
-                <br />
-                <div className="div-center" >
+                <img className='paddingTop' src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="50%" height="200px" />
+
+                <div className="div-center paddingTop" >
 
                     <p>You play by trying to guess a particular song with only snippets of the song.</p>
                     <p>Correct guesses will result in a point, but incorrect guesses will result in zero points.</p>
@@ -81,7 +91,7 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
             </div>
 
             {expired ?
-                <div>
+                <div className="paddingTop">
                     <p><em>Your spotify access token has expired, please <button onClick={spotifyLogout}>log out</button> and log back in for a new token</em></p>
                 </div>
                 :
@@ -91,7 +101,7 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
             {spotifyToken ?
                 <div className="form-group">
                     <form onSubmit={searchArtists}>
-                        <label className="col-form-label col-form-label-sm mt-4" htmlFor="search">Search: </label>
+                        <label className="form-label mt-4" htmlFor="search">Search: </label>
                         <input
                             type="text"
                             id="search"
@@ -99,21 +109,24 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
                             onChange={e => setSearch(e.target.value)
                             }
                         />
-                        <input className="btn btn-sm" type="submit" />
+                        <input className="btn  btn-game-choices m-3  btn-sm btn-primary container-mini" type="submit" />
                     </form>
                     <br></br>
 
-                    <h3>Search Results</h3>
 
                     {artistName ?
                         <Link to={`/game/${artistId}`}><input className="btn btn-sm btn:hover" type="button" value={`Start Game ${artistName}`} /></Link>
                         : ''
                     }
 
-                    <div className="grid-container">
-                        {renderArtists()
-                        }
-                    </div>
+                    {renderedArtists.length != 0 ?
+                        <>
+                            <h3 style={{ color: '#24CB4B' }}>Search Results</h3>
+                            <div className="grid-container" style={{ marginBottom: '5rem' }}>
+                                {renderedArtists}
+                            </div>
+                        </>
+                        : null}
 
                 </div>
 

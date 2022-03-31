@@ -10,7 +10,7 @@ export default function Login({ currentUser, setCurrentUser }) {
   })
   const [msg, setMessage] = useState('')
 
-  const handleFormSubmit = async  e => {
+  const handleFormSubmit = async e => {
     e.preventDefault()
     try {
       // post to the backend with the form data to login
@@ -31,30 +31,42 @@ export default function Login({ currentUser, setCurrentUser }) {
       console.log(err)
     }
   }
-  
+
   return (
     <div>
-      <h3>Login form:</h3>
       <p>{msg ? `the server has a message for you: ${msg}` : ''}</p>
-      <form onSubmit={handleFormSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input 
-          id="email"
-          placeholder='user@domain.com'
-          type="email"
-          onChange={e => setForm({...form, email: e.target.value})}
-          value={form.email}
-        />
 
-        <label htmlFor="password">Password:</label>
-        <input 
-          id="password"
-          type="password"
-          onChange={e => setForm({...form, password: e.target.value})}
-          value={form.password}
-        />
+      <form className='center' onSubmit={handleFormSubmit}
+        style={{ border: 'solid white', width: '50%', height: '28vh' }}>
+        <br />
+        <h3>Login form:</h3>
+        <div className="form-group">
+          <label className='form-label mt-4' htmlFor="email">Email:</label>
+          <input
+            id="email"
+            placeholder='user@domain.com'
+            type="email"
+            onChange={e => setForm({ ...form, email: e.target.value })}
+            value={form.email}
+            className="form-control center"
+            style={{ width: '300px' }}
+          />
+        </div>
 
-        <input type="submit" />
+        <div class="form-group">
+          <label className='form-label mt-4' htmlFor="password">Password:</label>
+          <input
+            id="password"
+            type="password"
+            onChange={e => setForm({ ...form, password: e.target.value })}
+            value={form.password}
+            className="form-control center"
+            style={{ width: '300px' }}
+          />
+
+        </div>
+
+        <input className="btn  btn-game-choices m-3 mx-5 btn-sm btn-primary container-mini" type="submit" />
       </form>
     </div>
   )

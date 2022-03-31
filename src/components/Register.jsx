@@ -42,47 +42,69 @@ export default function Register({ currentUser, setCurrentUser }) {
 
   return (
     <div>
-      <h3>Register a new account at Rankify</h3>
 
       <p>{msg}</p>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input 
-          type="email"
-          id="email"
-          value={form.email}
-          onChange={e => setForm({ ...form, email: e.target.value })}
-          placeholder='enter your email...'
-        />
-        <label htmlFor="name">Name:</label>
-        <input 
-          type="text"
-          id="name"
-          value={form.name}
-          onChange={e => setForm({ ...form, name: e.target.value })}
-          placeholder='enter your name...'
-        />
+      <form className='center' onSubmit={handleSubmit}
+        style={{ border: 'solid white', width: '50%', height: '38vh' }}>
+        <br />
+        <h3>Register a new account at Rankify</h3>
+        <div className="form-group" style={{ paddingBottom: '10px' }}>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={form.email}
+            onChange={e => setForm({ ...form, email: e.target.value })}
+            placeholder='enter your email...'
+            className="form-control center"
+            style={{ width: '300px' }}
+          />
 
-        <label htmlFor="password">Password:</label>
-        <input 
-          type="password"
-          id="password"
-          value={form.password}
-          onChange={e => setForm({ ...form, password: e.target.value })}
-          placeholder='enter your password...'
-        />
+        </div>
 
-        <label htmlFor="passwordConfirmation">Confirmation:</label>
-        <input 
-          type="password"
-          id="passwordConfirmation"
-          value={form.passwordConfirmation}
-          onChange={e => setForm({ ...form, passwordConfirmation: e.target.value })}
-          placeholder='enter your confirmation...'
-        />
+        <div class="form-group" style={{ paddingBottom: '10px' }}>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            value={form.name}
+            onChange={e => setForm({ ...form, name: e.target.value })}
+            placeholder='enter your name...'
+            className="form-control center"
+            style={{ width: '300px' }}
+          />
 
-        <input type="submit" />
+        </div>
+
+        <div class="form-group" style={{ paddingBottom: '10px' }}>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={form.password}
+            onChange={e => setForm({ ...form, password: e.target.value })}
+            placeholder='enter your password...'
+            className="form-control center"
+            style={{ width: '300px' }}
+          />
+
+        </div>
+        <div class="form-group" style={{ paddingBottom: '10px' }}>
+          <label htmlFor="passwordConfirmation">Confirmation:</label>
+          <input
+            type="password"
+            id="passwordConfirmation"
+            value={form.passwordConfirmation}
+            onChange={e => setForm({ ...form, passwordConfirmation: e.target.value })}
+            placeholder='enter your confirmation...'
+            className="form-control center"
+            style={{ width: '300px' }}
+          />
+
+        </div>
+
+        <input className="btn  btn-game-choices m-3 mx-5 btn-sm btn-primary container-mini" type="submit" />
       </form>
     </div>
   )
