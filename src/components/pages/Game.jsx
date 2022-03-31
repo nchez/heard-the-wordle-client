@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import EndGame from '../EndGame'
 
-export default function Game({ token, currentUser }) {
+export default function Game({ token, currentUser, difficulty }) {
     const { id } = useParams()
 
     const [tracks, setTracks] = useState([]) // tracks' name,song,id
@@ -19,7 +19,6 @@ export default function Game({ token, currentUser }) {
     const [rounds, setRounds] = useState(1) //keep track of the rounds
     const [score, setScore] = useState(0) // keep track of the scores
     const [keepTrack, setKeepTrack] = useState([{
-        artistName: '',
         songName: '',
         songId: '',
         songUrl: '',
@@ -122,6 +121,14 @@ export default function Game({ token, currentUser }) {
 
     const handleClick = () => {
         // console.log('click')
+        if (difficulty === 'easy') {
+            audio.sound.currentTime = 15
+        }
+        else if (difficulty === 'medium') {
+            audio.sound.currentTime = 20
+        } else if (difficulty === 'hard') {
+            audio.sound.currentTime = 26
+        }
         const prev = audio.isPlayed
         if (audio.sound != null) {
             if (audio.isPlayed) {
@@ -153,13 +160,13 @@ export default function Game({ token, currentUser }) {
             setRounds(rounds + 1)
             setScore(score + 1)
             console.log(true)
-            setKeepTrack([...keepTrack, { artistName: name, songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: true }])
+            setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: true }])
             loadAudio()
         }
         else {
             console.log(false)
             setRounds(rounds + 1)
-            setKeepTrack([...keepTrack, { artistName: name, songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: false }])
+            setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: false }])
             loadAudio()
         }
     }
@@ -171,7 +178,7 @@ export default function Game({ token, currentUser }) {
                 <div className="progress-bar bg-success" role="progressbar" style={{ width: `${(rounds - 1) * 20}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
-            {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} songsPlayed={keepTrack} /> :
+            {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} songsPlayed={keepTrack} artistName={name} difficulty={difficulty} /> :
                 <>
 
                     <div className='paddingTop'>
