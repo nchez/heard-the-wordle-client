@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from "react-router-dom"
 import axios from 'axios'
 
 export default function GameDetails({ gameDetail, spotifyToken, currentUser, deleteGame }) {
-    const [show, setShow] = useState(false)
+    // const [show, setShow] = useState(false)
     // state if apicall is still loading (false) or if it is completed (true)
     const [apiCall, setApiCall] = useState(false)
     // const [deleted, setDeleted] = useState(false)
@@ -27,13 +27,25 @@ export default function GameDetails({ gameDetail, spotifyToken, currentUser, del
     // }
     
     return (
-        <div>
-            <h4>{gameDetail.artistName} played on {dateObj.toDateString()}</h4>
-            <h3>Score: {gameDetail.score}</h3>
-            <div>
-            <Link to={`/game/${gameDetail.artistId}`}><input type="button" value={`Start Another ${apiCall ? gameDetail.artistName : 'Still Loading'} Game`} /></Link>
+        <tr>
+            <td>
+            <p>{dateObj.toDateString()}</p>
+            </td>
+            <td>
+            <p>{gameDetail.artistName}</p>
+            </td>
+            <td>
+            <p>{gameDetail.score}</p>
+            </td>
+            <td>
+            <p>Details</p>
+            </td>
+            <td>
+            <Link to={`/game/${gameDetail.artistId}`}><input type="button" value={`Start ${apiCall ? gameDetail.artistName : 'Still Loading'} Game`} /></Link>
+            </td>
+            <td>
             <input type="button" value={`Delete this Game`} onClick={()=>deleteGame(gameDetail)}/>
-            </div>
-        </div>
+            </td>
+        </tr>
     )
 }

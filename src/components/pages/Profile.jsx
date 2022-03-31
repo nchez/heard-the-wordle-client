@@ -2,14 +2,22 @@ import { useState, useEffect } from 'react'
 import GameDetails from './GameDetails'
 import axios from 'axios'
 
-export default function Profile({ spotifyToken, currentUser }) {
 
-  const [msg, setMsg] = useState('') 
+export default function Profile({ spotifyToken, currentUser }) {
+  const [form, setForm] = useState({
+    email: currentUser.email,
+    password: ''
+  })
+  const [artistSort, setArtistSort] = useState(null)
+  const [scoreSort, setScoreSort] = useState(null)
+  const [dateSort, setDateSort] = useState(null)
+  const [msg, setMsg] = useState(null)
   const [gameHistory, setGameHistory] = useState([])
+  const [passwordForm, setPasswordForm] = useState(false)
 
   // get artists name from Spotify API -- arrow function
   // map an array of promieses (promises.all()) and throw promises array into state inside a useEffect
-  // from weston's snippet, put resolved array in state
+  // from weston's snippet, put resolved array in  state
   // const getArtistName = async (artistId) => {
   //   try{
   //   let apiResponse = await axios.get(`https://api.spotify.com/v1/artists/${artistId}`, {
@@ -65,6 +73,8 @@ export default function Profile({ spotifyToken, currentUser }) {
     })()
   }, [])
 
+
+
       // handle deleteGame button
       const deleteGame = async (gameObj) => {
         await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api-v1/game/${gameObj.gameId}`)
@@ -76,8 +86,113 @@ export default function Profile({ spotifyToken, currentUser }) {
         // setDeleted(!deleted)
     }
 
+    const handleArtistSortClick = () => {
+      if (dateSort !== null || scoreSort !== null) {
+        setDateSort(null)
+        setScoreSort(null)
+      }
+      if (artistSort === null) {
+        gameHistory.sort((a,b)=> {
+          return b.artistId - a.artistId
+        })
+        setArtistSort('up')
+      } else if (artistSort === 'up') {
+        gameHistory.sort((a,b)=> {
+          return a.artistId - b.artistId
+        })
+        setArtistSort('down')
+      } else {
+        gameHistory.sort((a,b)=> {
+          return b.artistId - a.artistId
+        })
+        setArtistSort('up')
+      }
+    }
+    const handleDateSortClick = () => {
+      if (artistSort !== null || scoreSort !== null) {
+        setArtistSort(null)
+        setScoreSort(null)
+      }
+      if (dateSort === null) {
+        gameHistory.sort((a,b)=> {
+          return b.date - a.date
+        })
+        setDateSort('up')
+      } else if (dateSort === 'up') {
+        gameHistory.sort((a,b)=> {
+          return a.date - b.date
+        })
+        setDateSort('down')
+      } else {
+        gameHistory.sort((a,b)=> {
+          return b.date - a.date
+        })
+        setDateSort('up')
+      }
+    }
+    const handleScoreSortClick = () => {
+      if (artistSort !== null || dateSort !== null) {
+        setArtistSort(null)
+        setDateSort(null)
+      }
+      if (scoreSort === null) {
+        gameHistory.sort((a,b)=> {
+          return b.score - a.score
+        })
+        setScoreSort('up')
+      } else if (scoreSort === 'up') {
+        gameHistory.sort((a,b)=> {
+          return a.score - b.score
+        })
+        setScoreSort('down')
+      } else {
+        gameHistory.sort((a,b)=> {
+          return b.Score - a.score
+        })
+        setScoreSort('up')
+      }
+    }
+
+    const handlePasswordForm = async () => {
+      setPasswordForm(!false)
+    }
+    const handlePasswordChange = async (e) => {
+      try {
+      e.preventDefault()
+      const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/api-v1/users/changepassword`, form)
+      setPasswordForm(!passwordForm)
+      setMsg('Password successfully changed!')
+      setTimeout(()=> {setMsg(null)}, 5000)
+      } catch (err) {
+        console.log(err.response.data)
+      }
+    }
+
+    const changePasswordForm = (
+      <>
+      <p>Change Password</p>
+            <form onSubmit={handlePasswordChange}>
+  <label htmlFor="password">New Password</label>
+  <input type="password" name="password" id="password" onChange={e=>setForm({...form, password: e.target.value})} value={form.password}/>
+
+  <button type="submit" onClick={handlePasswordForm}>Submit</button>
+</form>
+      </>
+    )
+
+    const gameTableHeaders = (
+        <tr>
+          <th onClick={handleDateSortClick}>Date</th>
+          <th onClick={handleArtistSortClick}>Artist</th>
+          <th onClick={handleScoreSortClick}>Score</th>
+          <th>Details</th>
+          <th>New Game</th>
+          <th>Delete Game</th>
+        </tr>        
+    )
+
   const gameDetails =  gameHistory.map((element, index)=> {
-    return <GameDetails key={`game-detail-index-${index}`} gameDetail={element} spotifyToken={spotifyToken} currentUser={currentUser} deleteGame={deleteGame}/>
+    return <GameDetails key={`game-detail-index-${index}`} gameDetail={element} spotifyToken={spotifyToken} currentUser={currentUser} deleteGame={deleteGame} />
   })
   // const artistNames = gameHistory.map((element,index) => {
   //    return <li key={`artist-list-id-${index}`}>{element.artistId}</li>
@@ -87,21 +202,19 @@ export default function Profile({ spotifyToken, currentUser }) {
     <div>
       <div>
       <h3>{currentUser.name}'s Profile</h3>
-
-      <p>The artists you have played are:</p>
-      <ul>
-        {/* {artistNames} */}
-      </ul>
+      {!passwordForm && !msg ? <button onClick={handlePasswordForm}>Change Password?</button>: msg}
+      {passwordForm ? changePasswordForm : null}
       </div>
-      
-      <h6>{msg}</h6>
-
       <div>
         <h2>Game History</h2>
-
-        <ul>
-          {gameDetails}
-        </ul>
+        <div>
+        <table>
+          <tbody>
+        {gameTableHeaders}
+        {gameDetails}
+        </tbody>
+        </table>
+        </div>
 
       </div>
     </div>
