@@ -29,7 +29,7 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
             setArtists(data.artists.items)
             setExpired(false)
         }
-        catch(err) {
+        catch (err) {
             if (err.response.status === 401) {
                 console.log(err.response.data)
                 setExpired(true)
@@ -46,9 +46,9 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
     const renderArtists = () => {
         return artists.map(artist => (
             <>
-                <div className="grid-item" key={artist.id} onClick={()=>handleArtistClick(artist.id, artist.name)}>
+                <div className="grid-item" key={artist.id} onClick={() => handleArtistClick(artist.id, artist.name)}>
                     {artist.images.length ? <img className="img-container" src={artist.images[0].url} alt="" /> : <div>No Image</div>}
-                    <br/>
+                    <br />
                     {artist.name}
                 </div>
             </>
@@ -61,25 +61,25 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
         setExpired(false)
     }
 
-    return(
+    return (
         <div>
             <h1>How To Play</h1>
             {/* <h1>Search Page</h1> */}
-                <div>
-                    <p className="div-center" style={{ width: '50%'}}>The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!</p>
-                    <br/>
-                    <img src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="50%" height="200px"/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div className="div-center" >
-      
-                        <p>You play by trying to guess a particular song with only snippets of the song.</p>
-                        <p>Correct guesses will result in a point, but incorrect guesses will result in zero points.</p>
-                        <p>If you trust your ears, search for an artist to get started!</p>
-                    </div>
+            <div>
+                <p className="div-center" style={{ width: '50%' }}>The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!</p>
+                <br />
+                <img src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="50%" height="200px" />
+                <br />
+                <br />
+                <br />
+                <div className="div-center" >
+
+                    <p>You play by trying to guess a particular song with only snippets of the song.</p>
+                    <p>Correct guesses will result in a point, but incorrect guesses will result in zero points.</p>
+                    <p>If you trust your ears, search for an artist to get started!</p>
                 </div>
-            
+            </div>
+
             {expired ?
                 <div>
                     <p><em>Your spotify access token has expired, please <button onClick={spotifyLogout}>log out</button> and log back in for a new token</em></p>
@@ -88,21 +88,21 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
                 ''
             }
 
-            {spotifyToken ? 
+            {spotifyToken ?
                 <div className="form-group">
                     <form onSubmit={searchArtists}>
                         <label className="col-form-label col-form-label-sm mt-4" htmlFor="search">Search: </label>
-                        <input 
+                        <input
                             type="text"
                             id="search"
                             placeholder="enter your search here"
                             onChange={e => setSearch(e.target.value)
-                        }
+                            }
                         />
                         <input className="btn btn-sm" type="submit" />
                     </form>
                     <br></br>
-        
+
                     <h3>Search Results</h3>
 
                     {artistName ?
@@ -110,21 +110,21 @@ export default function Search({ spotifyToken, setSpotifyToken }) {
                         : ''
                     }
 
-                    <div className="grid-container">        
-                    {renderArtists()
-                    }
+                    <div className="grid-container">
+                        {renderArtists()
+                        }
                     </div>
-                    
-                </div>
-            
-            : <h1>You must be logged in to spotify</h1>
-        }
 
-        {!spotifyToken ?
-        <button><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
-          to Spotify</a></button>
-        : ''
-        }
+                </div>
+
+                : <h1>You must be logged in to spotify</h1>
+            }
+
+            {!spotifyToken ?
+                <button><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
+                    to Spotify</a></button>
+                : ''
+            }
 
         </div>
     )

@@ -24,6 +24,7 @@ export default function Game({ token, currentUser }) {
         songUrl: '',
         answer: null
     }])
+    const [name, setName] = useState()
 
     useEffect(() => {
         // const something = async () => {
@@ -45,6 +46,7 @@ export default function Game({ token, currentUser }) {
                     audioData.push({ name: response.data.tracks[i].name, song: response.data.tracks[i].preview_url, id: response.data.tracks[i].id })
                 }
                 //saving the tracks' data to a state
+                setName(response.data.tracks[0].artists[0].name)
                 setTracks(audioData) //tracks' name,url,id
             } catch (error) {
                 console.log(error)
@@ -135,7 +137,11 @@ export default function Game({ token, currentUser }) {
     const userChoice = btnChoice.map(name => {
         return (
             <>
-                <li><button value={name} onClick={() => checkAnswer(name)}>{name}</button></li>
+                <li>
+                    <div className="d-grid div-center-game">
+                        <button className="btn  btn-game-choices m-3 mx-5 btn-md btn-primary" style={{ color: 'white', border: 'solid #24CB4B', background: 'transparent' }} value={name} onClick={() => checkAnswer(name)}>{name}</button>
+                    </div>
+                </li>
             </>
         )
     })
@@ -157,21 +163,34 @@ export default function Game({ token, currentUser }) {
         }
     }
     return (
-        <div>
+        <div className='game-render'>
             {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} songsPlayed={keepTrack} /> :
                 <>
-                    <h2>Game Page</h2>
+
+                    <br />
                     <h3>Round {rounds} of 5</h3>
-                    <h3>Score: {score}</h3>
+
+                    <div className="progress center" style={{ width: '50%' }}>
+                        <div className="progress-bar bg-success" role="progressbar" style={{ width: `${rounds * 20}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <div className='padding'>
+                        <h3>Score: {score}</h3>
+                    </div>
+
+                    <div className='padding'>
+                        <h2>Playing now:</h2>
+                        <h3> {name} </h3>
+                    </div>
+
                     <div className="audio-widget">
                         <button onClick={handleClick}>
-                            {!audio.isPlayed ? <BsFillPlayCircleFill /> : <BsFillPauseCircleFill />}
+                            {!audio.isPlayed ? <BsFillPlayCircleFill style={{ color: '#24CB4B' }} /> : <BsFillPauseCircleFill style={{ color: '#24CB4B' }} />}
                         </button>
                     </div>
                     {/* <h5>Timer: 30 seconds</h5> */}
-                    <button onClick={loadAudio}>Load</button>
-                    <h3>Listen to the track and choose your answer</h3>
-
+                    {audio.sound === null ? <button className="btn  btn-game-choices m-3 btn-md btn-primary" style={{ color: 'white', border: 'solid #24CB4B', background: 'transparent' }} onClick={loadAudio}>Press to load Track</button> : null}
+                    <h3 style={{ paddingTop: '2rem', color: 'white' }}>Listen to the track and choose your answer</h3>
                     <ul>
                         {audio.sound != null ? userChoice : ''}
                     </ul>
