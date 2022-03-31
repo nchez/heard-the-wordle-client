@@ -59,7 +59,7 @@ export default function Profile({ spotifyToken, currentUser }) {
         // axios.post(url, body, options) (same thing w put)
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api-v1/users/profile`, options)
         const gameArrayData = response.data.map(element => {
-          return {gameId: element._id, artistId: element.artistId, score: element.score, date: element.createdAt}
+          return {gameId: element._id, artistId: element.artistId, score: element.score, songs: element.songsPlayed, date: new Date(element.createdAt)}
         })
         setGameHistory(gameArrayData)
         // const uniqueArtists = [...new Set(artistArray)]
@@ -87,24 +87,28 @@ export default function Profile({ spotifyToken, currentUser }) {
     }
 
     const handleArtistSortClick = () => {
+      let sortedArray = gameHistory.slice()
       if (dateSort !== null || scoreSort !== null) {
         setDateSort(null)
         setScoreSort(null)
       }
       if (artistSort === null) {
-        gameHistory.sort((a,b)=> {
-          return b.artistId - a.artistId
-        })
-        setArtistSort('up')
-      } else if (artistSort === 'up') {
-        gameHistory.sort((a,b)=> {
+        sortedArray.sort((a,b)=> {
           return a.artistId - b.artistId
         })
-        setArtistSort('down')
-      } else {
-        gameHistory.sort((a,b)=> {
-          return b.artistId - a.artistId
+        setGameHistory(sortedArray)
+        setArtistSort('up')
+      } else if (artistSort === 'up') {
+        sortedArray.sort((a,b)=> {
+          return a.artistId - b.artistId
         })
+        setGameHistory(sortedArray)
+        setArtistSort('down')
+      } else if (artistSort === 'down') {
+        sortedArray.sort((a,b)=> {
+          return b.artistName - a.artistName
+        })
+        setGameHistory(sortedArray)
         setArtistSort('up')
       }
     }
@@ -123,7 +127,7 @@ export default function Profile({ spotifyToken, currentUser }) {
           return a.date - b.date
         })
         setDateSort('down')
-      } else {
+      } else if (dateSort === 'down') {
         gameHistory.sort((a,b)=> {
           return b.date - a.date
         })

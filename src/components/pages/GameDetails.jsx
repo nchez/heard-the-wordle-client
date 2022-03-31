@@ -3,13 +3,12 @@ import { Link } from "react-router-dom"
 import axios from 'axios'
 
 export default function GameDetails({ gameDetail, spotifyToken, currentUser, deleteGame }) {
-    // const [show, setShow] = useState(false)
+    const [showDetails, setShowDetails] = useState(false)
     // state if apicall is still loading (false) or if it is completed (true)
     const [apiCall, setApiCall] = useState(false)
     // const [deleted, setDeleted] = useState(false)
-    
-    // change UTC timestamp from mongodb to js date obj
-    const dateObj = new Date(gameDetail.date)
+
+    // to prevent duplicate API calls on artistIds, pass game history and check for previous artistIds? But then how is the artist name grabbed?
 
     // api call (not async due to timing issues) to grab artist name and add name to gameDetail obj
     axios.get(`https://api.spotify.com/v1/artists/${gameDetail.artistId}`, {
@@ -25,11 +24,43 @@ export default function GameDetails({ gameDetail, spotifyToken, currentUser, del
     //     console.log('delete button clicked')
     //     // setDeleted(!deleted)
     // }
+
+    const songsPlayed = gameDetail.songs.map((element,index) => {
+        return <tr key={`songDetail-index-${index}`}>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a href={`${element.songUrl}`}>{element.songName}</a>
+            </td>
+            <td>
+                {element.answer === false ? 'Wrong': 'Correct'}
+            </td>
+        </tr>
+    })
+    const tableHeaders = (
+
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        Song Name
+                    </th>
+                    <th>
+                        Answer
+                    </th>
+                </tr>
+    )
+    const handleGameDetailClick = (array) => {
+        setShowDetails(!showDetails)
+    }
     
     return (
+        <>
         <tr>
             <td>
-            <p>{dateObj.toDateString()}</p>
+            <p>{gameDetail.date.toDateString()}</p>
             </td>
             <td>
             <p>{gameDetail.artistName}</p>
@@ -38,7 +69,7 @@ export default function GameDetails({ gameDetail, spotifyToken, currentUser, del
             <p>{gameDetail.score}</p>
             </td>
             <td>
-            <p>Details</p>
+            <p><input type="button" value={'Game Details'} onClick={()=>handleGameDetailClick()}/></p>
             </td>
             <td>
             <Link to={`/game/${gameDetail.artistId}`}><input type="button" value={`Start ${apiCall ? gameDetail.artistName : 'Still Loading'} Game`} /></Link>
@@ -47,5 +78,8 @@ export default function GameDetails({ gameDetail, spotifyToken, currentUser, del
             <input type="button" value={`Delete this Game`} onClick={()=>deleteGame(gameDetail)}/>
             </td>
         </tr>
+            {showDetails ? tableHeaders : null}
+            {showDetails ? songsPlayed : null}
+        </>
     )
 }
