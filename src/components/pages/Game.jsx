@@ -139,7 +139,7 @@ export default function Game({ token, currentUser }) {
             <>
                 <li>
                     <div className="d-grid div-center-game">
-                        <button className="btn  btn-game-choices m-3 mx-5 btn-md btn-primary" style={{ color: 'white', border: 'solid #24CB4B', background: 'transparent' }} value={name} onClick={() => checkAnswer(name)}>{name}</button>
+                        <button className="btn  btn-game-choices m-3 mx-5 btn-md btn-primary container-mini" value={name} onClick={() => checkAnswer(name)}>{name}</button>
                     </div>
                 </li>
             </>
@@ -164,15 +164,14 @@ export default function Game({ token, currentUser }) {
     }
     return (
         <div className='game-render'>
+            <br />
+            <h3>Round {rounds <= 5 ? rounds : rounds - 1} of 5</h3>
+            <div className="progress center" style={{ width: '50%' }}>
+                <div className="progress-bar bg-success" role="progressbar" style={{ width: `${(rounds - 1) * 20}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
             {rounds > 5 ? <EndGame score={score} artistId={id} currentUser={currentUser} songsPlayed={keepTrack} /> :
                 <>
-
-                    <br />
-                    <h3>Round {rounds} of 5</h3>
-
-                    <div className="progress center" style={{ width: '50%' }}>
-                        <div className="progress-bar bg-success" role="progressbar" style={{ width: `${rounds * 20}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
 
                     <div className='padding'>
                         <h3>Score: {score}</h3>
@@ -189,7 +188,7 @@ export default function Game({ token, currentUser }) {
                         </button>
                     </div>
                     {/* <h5>Timer: 30 seconds</h5> */}
-                    {audio.sound === null ? <button className="btn  btn-game-choices m-3 btn-md btn-primary" style={{ color: 'white', border: 'solid #24CB4B', background: 'transparent' }} onClick={loadAudio}>Press to load Track</button> : null}
+                    {audio.sound === null ? <button className="btn  btn-game-choices m-3 btn-md btn-primary container-mini" onClick={loadAudio}>Press to load Track</button> : null}
                     <h3 style={{ paddingTop: '2rem', color: 'white' }}>Listen to the track and choose your answer</h3>
                     <ul>
                         {audio.sound != null ? userChoice : ''}

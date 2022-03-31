@@ -12189,7 +12189,7 @@
  .list-group-item {
    background-color: transparent;
  }
-
+/* customs */
 .audio-widget > button{
   font-size: 100px;
   border: none;
@@ -12238,13 +12238,18 @@ ul {
 }
 
 
-.padding{
+.paddingTop{
   padding-top: 2rem;
 }
 
 
 .btn-game-choices{
   box-shadow: 5px 5px 10px rgba(55, 94, 148, 0.2), 5px 7px 10px rgba(255, 255, 255, 0.4);
+}
+.btn-search{
+  box-shadow: 5px 5px 10px rgba(55, 94, 148, 0.2), 5px 5px 10px rgba(255, 255, 255, 0.4);
+  background-color: #24CB4B; 
+  color: white;
 }
 
 .btn-game-choices:hover {
@@ -12256,7 +12261,22 @@ ul {
    text-align: center;
  }
 
- .position{
-   position: absolute;
-   bottom: 0;
+ .footer{
+   text-align: center;
+   background-color: #24CB4B;
  }
+
+ .footer > h5{
+  align-items:  center;
+ }
+
+ .nav-item{
+   padding: 0 0.7rem;
+ }
+
+ .container-mini{
+   color: white; 
+   border: solid #24CB4B;
+  background: transparent 
+ }
+
