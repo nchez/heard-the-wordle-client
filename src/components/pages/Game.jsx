@@ -27,7 +27,6 @@ export default function Game({ token, currentUser, difficulty }) {
     const [name, setName] = useState()
 
     useEffect(() => {
-        // const something = async () => {
         (async () => {
             try {
                 // accessing the api to get the top-tracks of the artist(id)
@@ -52,7 +51,7 @@ export default function Game({ token, currentUser, difficulty }) {
                 console.log(error)
             }
         })()
-        // }
+
     }, [])
 
 
@@ -69,11 +68,6 @@ export default function Game({ token, currentUser, difficulty }) {
             const prevSong = tracks[rand].song
             const prevName = tracks[rand].name
             const prevId = tracks[rand].id
-            // console.log('tracks name', prevName)
-            // console.log('tracks name', prevSong)
-            // console.log('keep track', keepTrack.length)
-            // console.log('keep track song', keepTrack.values)
-
             const searchArray = keepTrack.map(e => {
                 return e.songUrl
             })
@@ -84,10 +78,6 @@ export default function Game({ token, currentUser, difficulty }) {
             else if (!searchArray.includes(prevSong)) {
                 setAudio({ ...audio, name: prevName, id: prevId, sound: new Audio(prevSong) })//assigning a random song from the top 10 
             } else loadAudio()
-
-            // console.log('keep track', ...keepTrack)
-            // console.log('after setting audio', audio)
-            // randomChoices()
         }
     }
     useEffect(() => {
@@ -98,12 +88,30 @@ export default function Game({ token, currentUser, difficulty }) {
         console.log('correct', audio.name)
 
         console.log('before while', btnChoices.length)
-        // will create 4 randomized choices
+        // will create 4 randomized choices for easy
+        // will create 6 randomized choices for medium
+        // will create 8 randomized choices for hard
         if (tracks.length != 0) {
-            while (btnChoices.length != 4) {
-                const rand = Math.floor(Math.random() * tracks.length)
-                if (!btnChoices.includes(tracks[rand].name)) {
-                    btnChoices.push(tracks[rand].name)
+            if (difficulty === 'easy') {
+                while (btnChoices.length != 4) {
+                    const rand = Math.floor(Math.random() * tracks.length)
+                    if (!btnChoices.includes(tracks[rand].name)) {
+                        btnChoices.push(tracks[rand].name)
+                    }
+                }
+            } else if (difficulty === 'medium') {
+                while (btnChoices.length != 6) {
+                    const rand = Math.floor(Math.random() * tracks.length)
+                    if (!btnChoices.includes(tracks[rand].name)) {
+                        btnChoices.push(tracks[rand].name)
+                    }
+                }
+            } else if (difficulty === 'hard') {
+                while (btnChoices.length != 8) {
+                    const rand = Math.floor(Math.random() * tracks.length)
+                    if (!btnChoices.includes(tracks[rand].name)) {
+                        btnChoices.push(tracks[rand].name)
+                    }
                 }
             }
         }
@@ -123,11 +131,10 @@ export default function Game({ token, currentUser, difficulty }) {
         // console.log('click')
         if (difficulty === 'easy') {
             audio.sound.currentTime = 15
-        }
-        else if (difficulty === 'medium') {
+        } else if (difficulty === 'medium') {
             audio.sound.currentTime = 20
         } else if (difficulty === 'hard') {
-            audio.sound.currentTime = 26
+            audio.sound.currentTime = 27
         }
         const prev = audio.isPlayed
         if (audio.sound != null) {
@@ -187,12 +194,12 @@ export default function Game({ token, currentUser, difficulty }) {
 
                     <div className='paddingTop'>
                         <h2>Playing now:</h2>
-                        <h3> {name} </h3>
+                        <h3> {name} - {difficulty.toUpperCase()} </h3>
                     </div>
 
                     <div className="audio-widget">
                         <button onClick={handleClick}>
-                            {!audio.isPlayed ? <BsFillPlayCircleFill style={{ color: '#24CB4B' }} /> : <BsFillPauseCircleFill style={{ color: '#24CB4B' }} />}
+                            {!audio.isPlayed || audio.sound.ended ? <BsFillPlayCircleFill style={{ color: '#24CB4B' }} /> : <BsFillPauseCircleFill style={{ color: '#24CB4B' }} />}
                         </button>
                     </div>
                     {/* <h5>Timer: 30 seconds</h5> */}
