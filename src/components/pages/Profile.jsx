@@ -59,7 +59,7 @@ export default function Profile({ spotifyToken, currentUser }) {
         // axios.post(url, body, options) (same thing w put)
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api-v1/users/profile`, options)
         const gameArrayData = response.data.map(element => {
-          return {gameId: element._id, artistId: element.artistId, score: element.score, songs: element.songsPlayed, date: new Date(element.createdAt)}
+          return {gameId: element._id, artistName: element.artistName, score: element.score, difficulty: element.difficulty,songs: element.songsPlayed, date: new Date(element.createdAt)}
         })
         setGameHistory(gameArrayData)
         // const uniqueArtists = [...new Set(artistArray)]
@@ -87,29 +87,32 @@ export default function Profile({ spotifyToken, currentUser }) {
     }
 
     const handleArtistSortClick = () => {
-      let sortedArray = gameHistory.slice()
-      if (dateSort !== null || scoreSort !== null) {
-        setDateSort(null)
+      if (scoreSort !== null || dateSort !== null) {
         setScoreSort(null)
+        setDateSort(null)
       }
+      let sortedArray = gameHistory.slice()
       if (artistSort === null) {
         sortedArray.sort((a,b)=> {
-          return a.artistId - b.artistId
+          return a.localeCompare(b)
         })
         setGameHistory(sortedArray)
         setArtistSort('up')
+        console.log(sortedArray)
       } else if (artistSort === 'up') {
         sortedArray.sort((a,b)=> {
-          return a.artistId - b.artistId
+          return b.localeCompare(a)
         })
         setGameHistory(sortedArray)
         setArtistSort('down')
+        console.log(sortedArray)
       } else if (artistSort === 'down') {
         sortedArray.sort((a,b)=> {
-          return b.artistName - a.artistName
+          return a.localeCompare(b)
         })
         setGameHistory(sortedArray)
         setArtistSort('up')
+        console.log(sortedArray)
       }
     }
     const handleDateSortClick = () => {
@@ -189,6 +192,7 @@ export default function Profile({ spotifyToken, currentUser }) {
           <th onClick={handleDateSortClick}>Date</th>
           <th onClick={handleArtistSortClick}>Artist</th>
           <th onClick={handleScoreSortClick}>Score</th>
+          <th>Difficulty</th>
           <th>Details</th>
           <th>New Game</th>
           <th>Delete Game</th>
