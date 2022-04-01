@@ -120,7 +120,7 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
 
             {expired ?
                 <div className="paddingTop">
-                    <p><em>Your spotify access token has expired, please <button onClick={spotifyLogout}>log out</button> and log back in for a new token</em></p>
+                    <p><em>Your spotify access token has expired, please <button className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" onClick={spotifyLogout}>log out</button> and log back in for a new token</em></p>
                 </div>
                 :
                 ''
@@ -155,8 +155,6 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
                         </div>
 
                         <br />
-
-                        {/* start btn */}
                         {artistName && difficulty !== '' ?
                             <Link to={`/game/${artistId}`}><input className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" type="button" value={`Start Game ${artistName}`} /></Link>
                             : ''
@@ -181,7 +179,7 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
 
             {
                 !spotifyToken ?
-                    <button><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
+                    <button className="btn btn-game-choices m-3 btn-sm btn-primary container-mini"><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`} style={{ textDecoration: 'none', color: 'white' }} >Login
                         to Spotify</a></button>
                     : ''
             }
