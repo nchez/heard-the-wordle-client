@@ -14,6 +14,8 @@ export default function Profile({ spotifyToken, currentUser }) {
   const [msg, setMsg] = useState(null)
   const [gameHistory, setGameHistory] = useState([])
   const [passwordForm, setPasswordForm] = useState(false)
+  const [artistList, setArtistList] = useState([])
+  const [summary, setSummary] = useState([])
 
   // get artists name from Spotify API -- arrow function
   // map an array of promieses (promises.all()) and throw promises array into state inside a useEffect
@@ -41,6 +43,58 @@ export default function Profile({ spotifyToken, currentUser }) {
   //   // console.log(newArr)
   //   // return newArr
   // }
+  const summaryDetails = () => {
+    let newSummaryArray = []
+    for (let i =0; i < gameHistory.length; i++) {
+      if (newSummaryArray.find(element=>element.artistName === gameHistory[i].artistName) === undefined) {
+        artistList.push(gameHistory[i].artistName)
+        newSummaryArray.push({artistName: gameHistory[i].artistName, gameCount: 0, easyGames:0, medGames: 0, hardGames: 0,totalEasyScore: 0, totalMedScore: 0, totalHardScore:0})
+    }
+    const summaryToUpdate = newSummaryArray.find(element=>element.artistName === gameHistory[i].artistName)
+    console.log(summaryToUpdate)
+    summaryToUpdate.gameCount++
+    if (gameHistory[i].difficulty === 'easy') {
+      summaryToUpdate.easyGames++
+      summaryToUpdate.totalEasyScore+=gameHistory[i].score
+    } else if (gameHistory[i].difficulty === 'medium') {
+      summaryToUpdate.medGames++;
+      summaryToUpdate.totalMedScore+=gameHistory[i].score
+    } else if (gameHistory[i].difficulty === 'hard') {
+      summaryToUpdate.hardGames++;
+      summaryToUpdate.totalHardScore+=gameHistory[i].score
+    }
+    if (summaryToUpdate.easyGames > 0) {
+      summaryToUpdate.avgEasyScore = summaryToUpdate.totalEasyScore / summaryToUpdate.easyGames
+    }
+    if (summaryToUpdate.medGames > 0) {
+      summaryToUpdate.avgMedScore = summaryToUpdate.totalMedScore / summaryToUpdate.medGames
+    }
+    if (summaryToUpdate.hardGames > 0) {
+      summaryToUpdate.avgHardScore = summaryToUpdate.totalHardScore / summaryToUpdate.hardGames
+    }
+    summaryToUpdate.overallAvgScore = (summaryToUpdate.avgEasyScore + summaryToUpdate.avgMedScore + summaryToUpdate.avgHardScore)/3
+    // code for weighted score or average score
+    // if (summaryToUpdate.easyGames === 0 && summaryToUpdate.medGames === 0 && summaryToUpdate.hardGames === 0) {
+    // } else if (summaryToUpdate.easyGames === 0 && summaryToUpdate.medGames === 0) {
+    //   summaryToUpdate.weightedScore = (totalHardScore/hardGames)*.6
+    // } else if (summaryToUpdate.easyGames === 0 && summaryToUpdate.hardGames === 0) {
+    //   summaryToUpdate.weightedScore = (totalMedScore/medGames)*.30
+    // } else if (summaryToUpdate.medGames === 0 && summaryToUpdate.hardGames === 0) {
+    //   summaryToUpdate.weightedScore = (totalEasyScore/easyGames)*.10
+    // } else if (summaryToUpdate.medGames === 0) {
+    //   summaryToUpdate.weightedScore = (totalEasyScore/easyGames)*.16 +(totalHardScore/hardGames)*.84
+    // } else if (summaryToUpdate.hardGames === 0) {
+    //   summaryToUpdate.weightedScore = (totalEasyScore/easyGames)*.33 +(totalMedScore/medGames)*.66
+    // } else if (summaryToUpdate.easyGames === 0) {
+    //   summaryToUpdate.weightedScore = (totalEasyScore/easyGames)*.40 +(totalMedScore/medGames)*.60
+    // }
+  }
+  newSummaryArray.sort((a,b)=> {
+    return b.score - a.score
+  })
+  setSummary(newSummaryArray)
+
+  }
 
   // use useEffect to get data from the back
   useEffect(()=> {(async () => {
@@ -62,6 +116,7 @@ export default function Profile({ spotifyToken, currentUser }) {
           return {gameId: element._id, artistName: element.artistName, score: element.score, difficulty: element.difficulty,songs: element.songsPlayed, date: new Date(element.createdAt)}
         })
         setGameHistory(gameArrayData)
+        summaryDetails()
         // const uniqueArtists = [...new Set(artistArray)]
         // setArtists(uniqueArtists)
       
@@ -73,7 +128,9 @@ export default function Profile({ spotifyToken, currentUser }) {
     })()
   }, [])
 
-
+  useEffect(()=>{
+    summaryDetails()
+  }, [gameHistory])
 
       // handle deleteGame button
       const deleteGame = async (gameObj) => {
@@ -213,20 +270,18 @@ export default function Profile({ spotifyToken, currentUser }) {
     </tr>
   ) 
   
-
-  const summaryDetails = () => {
-    let gameCount = 0
-    let avgEasy = null
-    let avgMed = null
-    let avgHard = null
-    let wghtdScore = null
-    gameHistory.forEach((element, index)=> {
-      console.log(element)
-    }
-  }
-  // const artistNames = gameHistory.map((element,index) => {
-  //    return <li key={`artist-list-id-${index}`}>{element.artistId}</li>
-  //  })
+  const summaryTableRows = summary.map((element, index)=> {
+    return (
+      <tr key={`summary-row-index-${index}`}>
+        <td>{element.artistName}</td>
+        <td>{element.gameCount}</td>
+        <td>{element.overallAvgScore}</td>
+        <td>{element.avgEasyScore}</td>
+        <td>{element.avgMedScore}</td>
+        <td>{element.avgHardScore}</td>
+      </tr>
+    )
+  })
 
   return (
     <div>
@@ -240,7 +295,7 @@ export default function Profile({ spotifyToken, currentUser }) {
         <table>
           <tbody>
             {summaryTableHeaders}
-            {summaryDetails}
+            {summaryTableRows}
           </tbody>
         </table>
       </div>
