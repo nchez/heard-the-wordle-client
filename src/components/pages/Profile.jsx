@@ -221,7 +221,7 @@ export default function Profile({ spotifyToken, currentUser }) {
         <label htmlFor="password">New Password</label>
         <input type="password" name="password" id="password" onChange={e => setForm({ ...form, password: e.target.value })} value={form.password} />
 
-        <button type="submit" onClick={handlePasswordForm}>Submit</button>
+        <button className='btn  btn-game-choices m-2 btn-sm btn-primary container-mini' type="submit" onClick={handlePasswordForm}>Submit</button>
       </form>
     </>
   )
