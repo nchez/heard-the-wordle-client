@@ -9,18 +9,14 @@ export default function Home({ currentUser, setCurrentUser }) {
  
   const handleClick = e => {
     e.preventDefault()
-    console.log('testing', e.target.value)
     setLogin(e.target.value)
   }
   
   const handleForm = e => {
     e.preventDefault()
-    console.log('testing', e.target.value)
     setShowForm(true)
   }
-
-  console.log(currentUser)
-
+  
   return (
     <div className="home-description">
       <h1 style={{ paddingTop: '2.5rem' }}>Welcome to Rankify</h1>
@@ -32,7 +28,7 @@ export default function Home({ currentUser, setCurrentUser }) {
           <p>While walking to work, cleaning the house, or just simply lying in bed. </p>
           <p>But do you feel that sometimes you can do more than just listen? </p>
           <p>What if you can both enjoy and learn at the same time?</p>
-          <p>What if you can test your knowledge (about music) with other people and compete with them? </p>
+          <p>What if you can test your knowledge about music?</p>
           <p>We present to you..... RANKIFY! </p>
           <p>An app that tests your knowledge on music based on your choice of artist(s).</p>
           <p>Given a short preview of a song, you will need to correctly guess the song. </p>

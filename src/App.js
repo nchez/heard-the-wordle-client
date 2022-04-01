@@ -72,12 +72,6 @@ function App() {
 
       <div className="App">
 
-        {/* {!spotifyToken ?
-          <button><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
-            to Spotify</a></button>
-          : <button onClick={spotifyLogout}>Log out of Spotify</button>
-        } */}
-
         <Routes>
           <Route
             path='/'
