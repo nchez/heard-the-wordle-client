@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
 import { render } from "@testing-library/react"
@@ -14,6 +14,11 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
     const [artistId, setArtistId] = useState('')
     const [artistName, setArtistName] = useState('')
     const [expired, setExpired] = useState(false)
+    const [selected, setSelected] = useState(false)
+
+    useEffect(() => {
+        setDifficulty('')
+    }, [])
 
     const searchArtists = async e => {
         try {
@@ -42,13 +47,14 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
         console.log(`handle artist click for ${id}`)
         setArtistId(id)
         setArtistName(name)
+        setSelected(true)
     }
 
     const renderedArtists = artists.map(artist => {
         return (
             <>
                 <div className="grid-item" key={artist.id} onClick={() => handleArtistClick(artist.id, artist.name)}>
-                    {artist.images.length ? <img className="img-container" src={artist.images[0].url} alt="" /> : <div>No Image</div>}
+                    {artist.images.length ? <img className={`img-container ${selected && artist.id === artistId ? 'image-select' : ''}`} src={artist.images[0].url} alt="" /> : <div>No Image</div>}
                     <br />
                     {artist.name}
                 </div>
@@ -121,52 +127,53 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
             }
 
             {spotifyToken ?
-            <>
-            {/*search */}
-            <div className="form-group">
-                <form onSubmit={searchArtists}>
-                    <label className="form-label mt-4" htmlFor="search">Search: </label>
-                    <input
-                        type="text"
-                        id="search"
-                        placeholder="enter your search here"
-                        onChange={e => setSearch(e.target.value)
-                        }
-                    />
-                    <input className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" type="submit" />
-                </form>
-                <br></br>
+                <>
+                    {/*search */}
+                    <div className="form-group">
+                        <form onSubmit={searchArtists}>
+                            <label className="form-label mt-4" htmlFor="search">Search: </label>
+                            <input
+                                type="text"
+                                id="search"
+                                placeholder="enter your search here"
+                                onChange={e => setSearch(e.target.value)
+                                }
+                            />
+                            <input className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" type="submit" />
+                        </form>
+                        <br></br>
 
-                <div className="btn-group container-mini btn-game-choices btn-search" role="group" aria-label="Basic radio toggle button group"  >
-                    <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="" value={'easy'} onClick={() => gameModes('easy')}/>
-                    <label className="btn btn-outline-primary" for="btnradio1" style={{ backgroundColor: 'transparent', color : 'white' }} >Easy</label>
+                        <div className="btn-group container-mini btn-game-choices btn-search" role="group" aria-label="Basic radio toggle button group"  >
+                            <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="" value={'easy'} onClick={() => gameModes('easy')} />
+                            <label className="btn btn-outline-primary btn-sm" for="btnradio1" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px', paddingLeft: '20px' }} >Easy</label>
 
-                    <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked="" value={'medium'} onClick={() => gameModes('medium')}/>
-                    <label className="btn btn-outline-primary" for="btnradio2" style={{ backgroundColor: 'transparent', color : 'white' }} >Medium</label>
+                            <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked="" value={'medium'} onClick={() => gameModes('medium')} />
+                            <label className="btn btn-outline-primary btn-sm" for="btnradio2" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px' }} >Medium</label>
 
-                    <input type="radio" className="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked="" value={'hard'} onClick={() => gameModes('hard')} />
-                    <label className="btn btn-outline-primary" for="btnradio3" style={{ backgroundColor: 'transparent', color : 'white' }} >Hard</label>
-                </div>
-
-                <br />
-
-                {/* start btn */}
-                {artistName && difficulty !== '' ?
-                    <Link to={`/game/${artistId}`}><input className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" type="button" value={`Start Game ${artistName}`} /></Link>
-                    : ''
-                }
-
-                {/* search results */}
-                {renderedArtists.length != 0 ?
-                    <>
-                        <h3 style={{ color: '#24CB4B' }}>Search Results</h3>
-                        <div className="grid-container">
-                            {renderedArtists}
+                            <input type="radio" className="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked="" value={'hard'} onClick={() => gameModes('hard')} />
+                            <label className="btn btn-outline-primary btn-sm" for="btnradio3" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px', paddingRight: '20px' }} >Hard</label>
                         </div>
-                    </>
-                    : null}
 
-            </div>
+                        <br />
+
+                        {/* start btn */}
+                        {artistName && difficulty !== '' ?
+                            <Link to={`/game/${artistId}`}><input className="btn btn-game-choices m-3 btn-sm btn-primary container-mini" type="button" value={`Start Game ${artistName}`} /></Link>
+                            : ''
+                        }
+
+                        {/* search results */}
+                        {renderedArtists.length != 0 ?
+                            <>
+                                <br />
+                                <h3 style={{ color: '#24CB4B' }}>Search Results</h3>
+                                <div className="grid-container">
+                                    {renderedArtists}
+                                </div>
+                            </>
+                            : null}
+
+                    </div>
                 </>
 
                 : <h1>You must be logged in to spotify</h1>

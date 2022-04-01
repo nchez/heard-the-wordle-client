@@ -40,7 +40,6 @@ export default function Game({ token, currentUser, difficulty }) {
                 })
                 // array for storing the tracks' name and track_url
                 const audioData = []
-                console.log(response.data.tracks[0].artists[0].name)
                 for (let i = 0; i < response.data.tracks.length; i++) {
                     audioData.push({ name: response.data.tracks[i].name, song: response.data.tracks[i].preview_url, id: response.data.tracks[i].id })
                 }
@@ -85,9 +84,6 @@ export default function Game({ token, currentUser, difficulty }) {
         const rando = Math.floor(Math.random() * btnChoice.length)
 
         const correctAnswer = audio.name
-        console.log('correct', audio.name)
-
-        console.log('before while', btnChoices.length)
         // will create 4 randomized choices for easy
         // will create 6 randomized choices for medium
         // will create 8 randomized choices for hard
@@ -116,19 +112,13 @@ export default function Game({ token, currentUser, difficulty }) {
             }
         }
 
-        console.log('after while', btnChoices.length)
-        console.log('current', audio.name)
-        console.log('before', btnChoices)
         if (!btnChoices.includes(correctAnswer)) {
             btnChoices.splice(rando, 1, correctAnswer)
-            // console.log('after', btnChoices)
         }
         setBtnChoice(btnChoices)
-        console.log('this is the inside of the audio state', audio)
     }, [audio.sound])
 
     const handleClick = () => {
-        // console.log('click')
         if (difficulty === 'easy') {
             audio.sound.currentTime = 15
         } else if (difficulty === 'medium') {
@@ -162,16 +152,13 @@ export default function Game({ token, currentUser, difficulty }) {
     })
 
     const checkAnswer = (answer) => {
-        // const prev = rounds
         if (answer === audio.name) {
             setRounds(rounds + 1)
             setScore(score + 1)
-            console.log(true)
             setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: true }])
             loadAudio()
         }
         else {
-            console.log(false)
             setRounds(rounds + 1)
             setKeepTrack([...keepTrack, { songName: audio.name, songId: audio.id, songUrl: audio.sound.src, answer: false }])
             loadAudio()
