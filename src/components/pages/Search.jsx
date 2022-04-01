@@ -4,7 +4,7 @@ import axios from "axios"
 
 export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, difficulty }) {
     // spotify auth details
-    const REDIRECT_URI = "https://62473faf11ca1a0009826936--famous-gumption-d4f17e.netlify.app/search"
+    const REDIRECT_URI = "https://famous-gumption-d4f17e.netlify.app/search"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
 
