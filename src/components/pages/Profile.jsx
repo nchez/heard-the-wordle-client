@@ -16,6 +16,8 @@ export default function Profile({ spotifyToken, currentUser }) {
   const [passwordForm, setPasswordForm] = useState(false)
   const [artistList, setArtistList] = useState([])
   const [summary, setSummary] = useState([])
+  const [showSummary, setShowSummary] = useState(true)
+  const [showHistory, setShowHistory] = useState(true)
 
   // get artists name from Spotify API -- arrow function
   // map an array of promieses (promises.all()) and throw promises array into state inside a useEffect
@@ -72,7 +74,16 @@ export default function Profile({ spotifyToken, currentUser }) {
     if (summaryToUpdate.hardGames > 0) {
       summaryToUpdate.avgHardScore = summaryToUpdate.totalHardScore / summaryToUpdate.hardGames
     }
-    summaryToUpdate.overallAvgScore = (summaryToUpdate.avgEasyScore + summaryToUpdate.avgMedScore + summaryToUpdate.avgHardScore)/3
+    // overall avg score
+    if (summaryToUpdate.easyGames=== 0 && summaryToUpdate.medGames===0) {summaryToUpdate.overallAvgScore = (summaryToUpdate.avgHardScore)} else
+    if (summaryToUpdate.easyGames=== 0 && summaryToUpdate.hardGames===0) {summaryToUpdate.overallAvgScore = (summaryToUpdate.avgMedScore)} else
+    if (summaryToUpdate.medGames=== 0 && summaryToUpdate.hardGames===0) {summaryToUpdate.overallAvgScore = (summaryToUpdate.avgEasyScore)} else
+    if (summaryToUpdate.easyGames=== 0) {summaryToUpdate.overallAvgScore = (summaryToUpdate.avgMedScore + summaryToUpdate.avgHardScore)/2} else
+    if (summaryToUpdate.medGames=== 0) {summaryToUpdate.overallAvgScore = (summaryToUpdate.avgEasyScore + summaryToUpdate.avgMedScore)/2} else
+    if (summaryToUpdate.hardGames=== 0) {summaryToUpdate.overallAvgScore = (summaryToUpdate.avgEasyScore + summaryToUpdate.avgMedScore)/2} else {
+      {summaryToUpdate.overallAvgScore = (summaryToUpdate.avgEasyScore + summaryToUpdate.avgMedScore+summaryToUpdate.avgHighScore)/3}
+    }
+
     // code for weighted score or average score
     // if (summaryToUpdate.easyGames === 0 && summaryToUpdate.medGames === 0 && summaryToUpdate.hardGames === 0) {
     // } else if (summaryToUpdate.easyGames === 0 && summaryToUpdate.medGames === 0) {
@@ -230,6 +241,12 @@ export default function Profile({ spotifyToken, currentUser }) {
         console.log(err.response.data)
       }
     }
+    const handleShowSummary = () => {
+      setShowSummary(!showSummary)
+    }
+    const handleShowHistory = () => {
+      setShowHistory(!showHistory)
+    }
 
     const changePasswordForm = (
       <>
@@ -263,10 +280,10 @@ export default function Profile({ spotifyToken, currentUser }) {
     <tr>
       <th>Artist</th>
       <th>Games Played</th>
+      <th>Overall Avg Score</th>
       <th>Avg Easy Score</th>
       <th>Avg Med Score</th>
       <th>Avg Hard Score</th>
-      <th>Weighted Overall Score</th>
     </tr>
   ) 
   
@@ -283,6 +300,26 @@ export default function Profile({ spotifyToken, currentUser }) {
     )
   })
 
+  const gameTable = (
+    <div>
+    <table>
+      <tbody>
+    {gameTableHeaders}
+    {gameDetails}
+    </tbody>
+    </table>
+    </div>
+  )
+
+  const summaryTable = (
+    <table>
+    <tbody>
+      {summaryTableHeaders}
+      {summaryTableRows}
+    </tbody>
+  </table>
+  )
+
   return (
     <div>
       <div>
@@ -291,24 +328,12 @@ export default function Profile({ spotifyToken, currentUser }) {
       {passwordForm ? changePasswordForm : null}
       </div>
       <div>
-        <h2>Summary</h2>
-        <table>
-          <tbody>
-            {summaryTableHeaders}
-            {summaryTableRows}
-          </tbody>
-        </table>
+        <h2>Summary<button onClick={handleShowSummary}>{showSummary ? 'Hide': 'Show'}</button></h2>
+        {showSummary ? summaryTable : null}
       </div>
       <div>
-        <h2>Game History</h2>
-        <div>
-        <table>
-          <tbody>
-        {gameTableHeaders}
-        {gameDetails}
-        </tbody>
-        </table>
-        </div>
+        <h2>Game History<button onClick={handleShowHistory}>{showHistory ? 'Hide' : 'Show'}</button></h2>
+       {showHistory ? gameTable : null}
 
       </div>
     </div>

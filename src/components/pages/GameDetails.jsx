@@ -73,7 +73,7 @@ export default function GameDetails({ gameDetail, spotifyToken, currentUser, del
                 {gameDetail.difficulty.toUpperCase()}
             </td>
             <td>
-            <input type="button" value={'Game Details'} onClick={()=>handleGameDetailClick()}/>
+            <input type="button" value={showDetails ? 'Hide Game Details': 'Show Game Details'} onClick={()=>handleGameDetailClick()}/>
             </td>
             <td>
             <Link to={`/game/${gameDetail.artistId}`}><input type="button" value={`Start ${gameDetail.artistName} Game`} /></Link>
