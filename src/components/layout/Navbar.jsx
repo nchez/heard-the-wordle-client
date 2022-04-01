@@ -39,7 +39,7 @@ export default function Navbar({ handleLogout, currentUser }) {
                             to="/search"
                             style={{ textDecoration: "none", color: "white" }}
                         >
-                            Search
+                            Play
                         </Link>
                     </li>
 
@@ -56,7 +56,7 @@ export default function Navbar({ handleLogout, currentUser }) {
 
     return (
         <>
-    <nav className="navbar navbar-expand-lg navbar-dark" style = {{ 'background-color': '#24CB4B' }}
+    <nav className="navbar navbar-expand-lg navbar-dark" style = {{ 'backgroundColor': '#24CB4B' }}
 >
         <div className="container-fluid">
             <a className="navbar-brand" href="/">

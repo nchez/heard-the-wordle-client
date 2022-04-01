@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
-import { render } from "@testing-library/react"
 
 export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, difficulty }) {
-    const CLIENT_ID = "9339daa0c0bd4724976bb425f44f9a2f"
     const REDIRECT_URI = "http://localhost:3000/search"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
@@ -44,7 +42,6 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
     }
 
     const handleArtistClick = (id, name) => {
-        console.log(`handle artist click for ${id}`)
         setArtistId(id)
         setArtistName(name)
         setSelected(true)
@@ -80,24 +77,7 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
     return (
         <div>
             <h1 className="paddingTop">How To Play</h1>
-            {/* <h1>Search Page</h1> */}
             <div>
-                {/* <img className='paddingTop' src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="55%" height="220vh" /> */}
-                {/* {renderedArtists.length != 0 ?
-                    <>
-                        <p className="div-center paddingTop" style={{ width: '60%' }}>
-                            The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!
-                        </p>
-                        <img className='paddingTop' src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="30%" height="100vh" />
-                    </>
-                    :
-                    <>
-                        <p className="div-center paddingTop" style={{ width: '60%' }}>
-                            The world is obsessed with the word guessing game Wordle, but if vocabulary is not your thing and music is more of your speed, may we suggest our game, "Rankify"!
-                        </p>
-                        <img className='paddingTop' src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="55%" height="220vh" />
-                    </>
-                } */}
                 {renderedArtists.length === 0 ?
                     <>
                         <p className="div-center paddingTop" style={{ width: '60%' }}>
@@ -106,7 +86,6 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
                         <br />
                         <img className='paddingTop' src="https://c.tenor.com/WOQ4NaiPiRwAAAAC/beats-art.gif" alt="search-page-pic" width="55%" height="220vh" />
                     </>
-
                     : ''
                 }
 
@@ -144,14 +123,14 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
                         <br></br>
 
                         <div className="btn-group container-mini btn-game-choices btn-search" role="group" aria-label="Basic radio toggle button group"  >
-                            <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="" value={'easy'} onClick={() => gameModes('easy')} />
-                            <label className="btn btn-outline-primary btn-sm" for="btnradio1" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px', paddingLeft: '20px' }} >Easy</label>
+                            <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked="" readOnly value={'easy'} onClick={() => gameModes('easy')} />
+                            <label className="btn btn-outline-primary btn-sm" htmlFor="btnradio1" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px', paddingLeft: '20px' }} >Easy</label>
 
-                            <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked="" value={'medium'} onClick={() => gameModes('medium')} />
-                            <label className="btn btn-outline-primary btn-sm" for="btnradio2" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px' }} >Medium</label>
+                            <input type="radio" className="btn-check" name="btnradio" id="btnradio2" autoComplete="off" checked="" readOnly value={'medium'} onClick={() => gameModes('medium')} />
+                            <label className="btn btn-outline-primary btn-sm" htmlFor="btnradio2" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px' }} >Medium</label>
 
-                            <input type="radio" className="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked="" value={'hard'} onClick={() => gameModes('hard')} />
-                            <label className="btn btn-outline-primary btn-sm" for="btnradio3" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px', paddingRight: '20px' }} >Hard</label>
+                            <input type="radio" className="btn-check" name="btnradio" id="btnradio3" autoComplete="off" checked="" readOnly value={'hard'} onClick={() => gameModes('hard')} />
+                            <label className="btn btn-outline-primary btn-sm" htmlFor="btnradio3" style={{ backgroundColor: 'transparent', color: 'white', fontSize: '16px', paddingRight: '20px' }} >Hard</label>
                         </div>
 
                         <br />
@@ -170,7 +149,6 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
                                 </div>
                             </>
                             : null}
-
                     </div>
                 </>
 
@@ -179,11 +157,10 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
 
             {
                 !spotifyToken ?
-                    <button className="btn btn-game-choices m-3 btn-sm btn-primary container-mini"><a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`} style={{ textDecoration: 'none', color: 'white' }} >Login
+                    <button className="btn btn-game-choices m-3 btn-sm btn-primary container-mini"><a href={`${AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`} style={{ textDecoration: 'none', color: 'white' }} >Log in
                         to Spotify</a></button>
                     : ''
             }
-
         </div >
     )
 }
