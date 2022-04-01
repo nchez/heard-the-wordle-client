@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import axios from "axios"
 
 export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, difficulty }) {
+    // spotify auth details
     const REDIRECT_URI = "http://localhost:3000/search"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
@@ -34,6 +35,7 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
             setExpired(false)
         }
         catch (err) {
+            // if spotify token is expired, change state to display message for log out/log back in
             if (err.response.status === 401) {
                 console.log(err.response.data)
                 setExpired(true)
@@ -47,15 +49,13 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
         setSelected(true)
     }
 
-    const renderedArtists = artists.map(artist => {
+    const renderedArtists = artists.map((artist, idx) => {
         return (
-            <>
-                <div className="grid-item" key={artist.id} onClick={() => handleArtistClick(artist.id, artist.name)}>
+                <div key={`artist index: ${idx}`} className="grid-item" onClick={() => handleArtistClick(artist.id, artist.name)}>
                     {artist.images.length ? <img className={`img-container ${selected && artist.id === artistId ? 'image-select' : ''}`} src={artist.images[0].url} alt="" /> : <div>No Image</div>}
                     <br />
                     {artist.name}
                 </div>
-            </>
         )
     })
 
@@ -107,7 +107,6 @@ export default function Search({ spotifyToken, setSpotifyToken, setDifficulty, d
 
             {spotifyToken ?
                 <>
-                    {/*search */}
                     <div className="form-group">
                         <form onSubmit={searchArtists}>
                             <label className="form-label mt-4" htmlFor="search">Search: </label>

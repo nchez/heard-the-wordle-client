@@ -19,32 +19,6 @@ export default function Profile({ spotifyToken, currentUser }) {
   const [showSummary, setShowSummary] = useState(true)
   const [showHistory, setShowHistory] = useState(true)
 
-  // get artists name from Spotify API -- arrow function
-  // map an array of promieses (promises.all()) and throw promises array into state inside a useEffect
-  // from weston's snippet, put resolved array in  state
-  // const getArtistName = async (artistId) => {
-  //   try{
-  //   let apiResponse = await axios.get(`https://api.spotify.com/v1/artists/${artistId}`, {
-  //     headers: {
-  //         Authorization: `Bearer ${spotifyToken}`
-  //     }
-  // })
-  // return apiResponse.data.name} catch (err) {
-  // console.log(err)
-  //   }
-  // }
-
-  // // replace artistId with artists name
-  // const addArtistNames = async (array) => {
-  //   // let newArr = []
-  //   for (const element of array) {
-  //     element.artistName = await getArtistName(element.artistId)
-  //     // let awaitArtist = await getArtistName(element.artist)
-  //     // newArr.push(awaitArtist)
-  //   }
-  //   // console.log(newArr)
-  //   // return newArr
-  // }
   const summaryDetails = () => {
     let newSummaryArray = []
     for (let i = 0; i < gameHistory.length; i++) {
@@ -53,7 +27,6 @@ export default function Profile({ spotifyToken, currentUser }) {
         newSummaryArray.push({ artistName: gameHistory[i].artistName, gameCount: 0, easyGames: 0, medGames: 0, hardGames: 0, totalEasyScore: 0, totalMedScore: 0, totalHardScore: 0 })
       }
       const summaryToUpdate = newSummaryArray.find(element => element.artistName === gameHistory[i].artistName)
-      console.log(summaryToUpdate)
       summaryToUpdate.gameCount++
       if (gameHistory[i].difficulty === 'easy') {
         summaryToUpdate.easyGames++
@@ -113,7 +86,6 @@ export default function Profile({ spotifyToken, currentUser }) {
       try {
         // get token for local storage
         const token = localStorage.getItem('jwt')
-        // console.log('token', token)
         // make the auth headers
         const options = {
           headers: {
@@ -121,19 +93,14 @@ export default function Profile({ spotifyToken, currentUser }) {
           }
         }
         // hit the auth locked endpoint
-        // axios.get(url, options)
-        // axios.post(url, body, options) (same thing w put)
         const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api-v1/users/profile`, options)
         const gameArrayData = response.data.map(element => {
           return { gameId: element._id, artistName: element.artistName, score: element.score, difficulty: element.difficulty, songs: element.songsPlayed, date: new Date(element.createdAt) }
         })
         setGameHistory(gameArrayData)
         summaryDetails()
-        // const uniqueArtists = [...new Set(artistArray)]
-        // setArtists(uniqueArtists)
 
         // set the data from the server in state
-        // setMsg(response.data.msg)
       } catch (err) {
         console.log(err)
       }
@@ -147,12 +114,10 @@ export default function Profile({ spotifyToken, currentUser }) {
   // handle deleteGame button
   const deleteGame = async (gameObj) => {
     await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api-v1/game/${gameObj.gameId}`)
-    console.log('delete button clicked')
     const indexOfDeletedGame = gameHistory.indexOf(gameHistory.find(element => element.gameId === gameObj.gameId))
     const updatedArray = gameHistory.slice()
     updatedArray.splice(indexOfDeletedGame, 1)
     setGameHistory(updatedArray)
-    // setDeleted(!deleted)
   }
 
   const handleArtistSortClick = () => {

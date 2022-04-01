@@ -5,12 +5,12 @@ import { Link } from "react-router-dom"
 export default function EndGame({ score, artistId, currentUser, songsPlayed, difficulty, artistName }) {
     const [scoreSubmit, setScoreSubmit] = useState(false)
 
-    // filter out empty inputs in array - .shift() was removing more than just first index from array
+    // filter out empty input in array
     const filteredArr = songsPlayed.filter(el => {
         return el.songName !== ''
-        console.log(el)
     })
 
+    // game data object to be passed into database
     const scoreObj = {
         difficulty: difficulty,
         artistName: artistName,
@@ -18,7 +18,6 @@ export default function EndGame({ score, artistId, currentUser, songsPlayed, dif
         userId: currentUser.id,
         songsPlayed: filteredArr
     }
-
 
     const submitScore = async () => {
         try {
@@ -47,7 +46,7 @@ export default function EndGame({ score, artistId, currentUser, songsPlayed, dif
                         <img src="https://i.gifer.com/LrS.gif" alt="end-game-gif" />
                         :
                         score === 4 ?
-                            <img src="https://c.tenor.com/e-0xn3dsDd4AAAAM/will-smith.gif" alt="end-game-gif" />
+                            <img src="https://media2.giphy.com/media/1DuTgO2BAubGFpe6R8/200.webp?cid=ecf05e47apig63kp5b6nib0sad6unf2qsfysk133uhxqhiqx&rid=200.webp&ct=g" alt="end-game-gif" />
                             :
                             score === 5 ?
                                 <img src="https://blog.hubspot.com/hubfs/Smiling%20Leo%20Perfect%20GIF.gif" alt="end-game-gif" />
