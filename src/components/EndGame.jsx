@@ -11,8 +11,6 @@ export default function EndGame({ score, artistId, currentUser, songsPlayed, dif
         console.log(el)
     })
 
-    console.log('filtered array', filteredArr)
-
     const scoreObj = {
         difficulty: difficulty,
         artistName: artistName,
@@ -34,15 +32,38 @@ export default function EndGame({ score, artistId, currentUser, songsPlayed, dif
 
     return (
         <div>
+            <br />
             <h1>End Game</h1>
-            <h3>Score for this round: {score}</h3>
-
-            {!scoreSubmit ?
-                <button onClick={submitScore}>Submit Your Score</button>
+            <br />
+            <h3>Final Score: {score}</h3>
+            <br />
+            {score === 1 ?
+                <img src="https://c.tenor.com/JhIdzlzIPCoAAAAM/oprah-you.gif" alt="end-game-gif" />
                 :
-                <button><Link to="/search">Play Again</Link></button>
+                score === 2 ?
+                    <img src="https://i.gifer.com/Bax.gif" alt="end-game-gif" />
+                    :
+                    score === 3 ?
+                        <img src="https://i.gifer.com/LrS.gif" alt="end-game-gif" />
+                        :
+                        score === 4 ?
+                            <img src="https://c.tenor.com/e-0xn3dsDd4AAAAM/will-smith.gif" alt="end-game-gif" />
+                            :
+                            score === 5 ?
+                                <img src="https://blog.hubspot.com/hubfs/Smiling%20Leo%20Perfect%20GIF.gif" alt="end-game-gif" />
+                                :
+                                <img src="https://c.tenor.com/ebMtOFGv1uYAAAAC/none-you-get-zero-none.gif" alt="end-game-gif" />
+            }
+            <br />
+            {!scoreSubmit ?
+                <button className="btn btn-game-choices m-3 mx-2 btn-md btn-primary container-mini" onClick={submitScore}>Submit Your Score</button>
+                :
+                <>
+                    <button className="btn btn-game-choices m-3 mx-2 btn-md btn-primary container-mini" ><Link to="/search" style={{ textDecoration: 'none', color: 'white' }}>Play Again: New Artist</Link></button>
+                    {/* <button className="btn btn-game-choices m-3 mx-2 btn-md btn-primary container-mini" ><Link to={`/game/${artistId}`} style={{ textDecoration: 'none', color: 'white' }}>Play Again: {artistName}</Link></button> */}
+                </>
             }
 
-        </div>
+        </div >
     )
 }
