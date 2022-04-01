@@ -1,39 +1,89 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from "react-router-dom"
 import axios from 'axios'
 
 export default function GameDetails({ gameDetail, spotifyToken, currentUser, deleteGame }) {
-    const [show, setShow] = useState(false)
+    const [showDetails, setShowDetails] = useState(false)
     // state if apicall is still loading (false) or if it is completed (true)
-    const [apiCall, setApiCall] = useState(false)
     // const [deleted, setDeleted] = useState(false)
-    
-    // change UTC timestamp from mongodb to js date obj
-    const dateObj = new Date(gameDetail.date)
+
+    // to prevent duplicate API calls on artistIds, pass game history and check for previous artistIds? But then how is the artist name grabbed?
 
     // api call (not async due to timing issues) to grab artist name and add name to gameDetail obj
-    axios.get(`https://api.spotify.com/v1/artists/${gameDetail.artistId}`, {
-          headers: {
-              Authorization: `Bearer ${spotifyToken}`
-          }
-    }).then(response => {gameDetail.artistName = response.data.name}).then(()=>{setApiCall(true)}).catch(e=> {
-        console.log(e)
-    })
+    // axios.get(`https://api.spotify.com/v1/artists/${gameDetail.artistId}`, {
+    //       headers: {
+    //           Authorization: `Bearer ${spotifyToken}`
+    //       }
+    // }).then(response => {gameDetail.artistName = response.data.name}).then(()=>{setApiCall(true)}).catch(e=> {
+    //     console.log(e)
+    // })
     // // handle deleteGame button
     // const deleteGame = async () => {
     //     await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api-v1/game/${gameDetail.gameId}`)
     //     console.log('delete button clicked')
     //     // setDeleted(!deleted)
     // }
+
+    const songsPlayed = gameDetail.songs.map((element,index) => {
+        return <tr key={`songDetail-index-${index}`}>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a href={`${element.songUrl}`}>{element.songName}</a>
+            </td>
+            <td>
+                {element.answer === false ? 'Wrong': 'Correct'}
+            </td>
+        </tr>
+    })
+    const tableHeaders = (
+
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        Song Name
+                    </th>
+                    <th>
+                        Answer
+                    </th>
+                </tr>
+    )
+    const handleGameDetailClick = (array) => {
+        setShowDetails(!showDetails)
+    }
     
     return (
-        <div>
-            <h4>{gameDetail.artistName} played on {dateObj.toDateString()}</h4>
-            <h3>Score: {gameDetail.score}</h3>
-            <div>
-            <Link to={`/game/${gameDetail.artistId}`}><input type="button" value={`Start Another ${apiCall ? gameDetail.artistName : 'Still Loading'} Game`} /></Link>
+        <>
+        <tr>
+            <td>
+            {gameDetail.date.toDateString()}
+            </td>
+            <td>
+            {gameDetail.artistName}
+            </td>
+            <td>
+            {gameDetail.score}
+            </td>
+            <td>
+                {gameDetail.difficulty.toUpperCase()}
+            </td>
+            <td>
+            <input type="button" value={showDetails ? 'Hide Game Details': 'Show Game Details'} onClick={()=>handleGameDetailClick()}/>
+            </td>
+            <td>
+            <Link to={`/game/${gameDetail.artistId}`}><input type="button" value={`Start ${gameDetail.artistName} Game`} /></Link>
+            </td>
+            <td>
             <input type="button" value={`Delete this Game`} onClick={()=>deleteGame(gameDetail)}/>
-            </div>
-        </div>
+            </td>
+        </tr>
+            {showDetails ? tableHeaders : null}
+            {showDetails ? songsPlayed : null}
+        </>
     )
 }
